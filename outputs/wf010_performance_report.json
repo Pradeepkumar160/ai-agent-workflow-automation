@@ -157,13 +157,13 @@
     }
   ],
   "recommendations": [
-    "Add automated validation for price fields to eliminate \"Invalid price format\" errors and reduce WF002 failures",
-    "Implement pre\u2011run checks for required columns (e.g., sku) and vendor file presence to stop \"Missing required column\" and \"Vendor price file missing\" errors",
-    "Increase LLM request timeout or add retry/back\u2011off logic to mitigate \"LLM timeout\" failures in WF004 and WF007",
-    "Reduce WF002 failure rate by adding idempotent retry logic and detailed error logging for the failing steps",
-    "Investigate and refactor the \"shipment_lookup\" step in WF005 to lower its average time (6.6\u202fs) and bring total workflow time under the 8\u202fs threshold",
-    "Optimize the \"llm_generate\" step in WF004 (5.44\u202fs) by caching prompts or using a smaller model to improve overall latency",
-    "Set up monitoring alerts for any workflow whose failure_rate exceeds 10\u202f% or avg_execution_time exceeds 8\u202fs",
-    "Create a post\u2011run report that aggregates frequent error types and triggers targeted remediation tickets"
+    "Investigate WF002 root cause; add detailed logging, retry logic, and validate upstream data to lower its 50% failure rate.",
+    "Fix data quality for WF003 and WF004 (invalid price format, missing SKU, missing vendor file) and add pre\u2011run validation to bring failure rates below 10%.",
+    "Profile and optimize WF005 execution; specifically improve the shipment_lookup step via caching, parallelism, or increased resources to reduce avg time below 8\u202fs.",
+    "Implement strict schema validation and sanitization for price fields to eliminate \"Invalid price format\" errors.",
+    "Add pre\u2011flight checks for required columns (e.g., sku) and vendor price file existence to prevent missing\u2011column and missing\u2011file failures.",
+    "Increase LLM timeout settings or simplify prompts to reduce LLM timeout occurrences; monitor LLM latency.",
+    "Configure automated alerts when failure_rate >10% or avg_execution_time >8\u202fs for any workflow.",
+    "Review and optimize slow steps such as llm_generate in WF004 and llm_messaging in WF007 (e.g., batch requests, use faster model variants)."
   ]
 }

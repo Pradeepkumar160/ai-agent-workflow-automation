@@ -10,7 +10,7 @@
       "workflow_id": "WF001",
       "workflow_name": "Inventory Restock Check",
       "confidence": 0.99,
-      "reason": "User asks which products need restocking, matching WF001 trigger",
+      "reason": "User asks which products need restocking, matching the trigger for Inventory Restock Check workflow.",
       "method": "llm",
       "alternatives": [
         {
@@ -79,7 +79,7 @@
           "name": "Load inventory",
           "status": "success",
           "detail": "10 inventory rows loaded",
-          "duration_ms": 8.84,
+          "duration_ms": 14.54,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -88,7 +88,7 @@
               },
               "status": "success",
               "summary": "table with 10 rows, 4 columns",
-              "duration_ms": 8.25,
+              "duration_ms": 13.96,
               "attempts": 1,
               "error": null
             },
@@ -105,7 +105,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 0.5,
+              "duration_ms": 0.48,
               "attempts": 1,
               "error": null
             }
@@ -116,7 +116,7 @@
           "name": "compare current stock with minimum threshold",
           "status": "success",
           "detail": "1 rows skipped (non-numeric stock)",
-          "duration_ms": 6.21,
+          "duration_ms": 34.27,
           "tool_calls": []
         },
         {
@@ -124,7 +124,7 @@
           "name": "identify low-stock products",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.13,
+          "duration_ms": 1.21,
           "tool_calls": []
         },
         {
@@ -132,7 +132,7 @@
           "name": "calculate reorder quantity",
           "status": "success",
           "detail": "",
-          "duration_ms": 2.37,
+          "duration_ms": 3.98,
           "tool_calls": [
             {
               "tool": "calculator",
@@ -144,7 +144,7 @@
               },
               "status": "success",
               "summary": "series of 4 values",
-              "duration_ms": 1.48,
+              "duration_ms": 1.43,
               "attempts": 1,
               "error": null
             }
@@ -155,7 +155,7 @@
           "name": "generate restock list",
           "status": "success",
           "detail": "",
-          "duration_ms": 3.79,
+          "duration_ms": 9.89,
           "tool_calls": []
         }
       ],
@@ -171,7 +171,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 22.85,
+      "duration_ms": 64.22,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -186,7 +186,7 @@
       "workflow_id": "WF002",
       "workflow_name": "Product Price Validation",
       "confidence": 0.97,
-      "reason": "The request is to compare product prices with vendor prices and identify differences over 10%, which aligns directly with the Product Price Validation workflow (WF002).",
+      "reason": "User wants to identify products where vendor price differs by >10%, which matches the Product Price Validation workflow that compares product prices with vendor price list and reports differences.",
       "method": "llm",
       "alternatives": [
         {
@@ -295,7 +295,7 @@
           "name": "Load product prices",
           "status": "success",
           "detail": "10 internal rows, 10 vendor rows",
-          "duration_ms": 7.37,
+          "duration_ms": 7.71,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -304,7 +304,7 @@
               },
               "status": "success",
               "summary": "table with 10 rows, 7 columns",
-              "duration_ms": 3.76,
+              "duration_ms": 4.0,
               "attempts": 1,
               "error": null
             },
@@ -315,7 +315,7 @@
               },
               "status": "success",
               "summary": "table with 10 rows, 3 columns",
-              "duration_ms": 2.84,
+              "duration_ms": 2.87,
               "attempts": 1,
               "error": null
             },
@@ -330,7 +330,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 0.39,
+              "duration_ms": 0.46,
               "attempts": 1,
               "error": null
             },
@@ -356,7 +356,7 @@
           "name": "match products by SKU",
           "status": "success",
           "detail": "9 matched, 1 internal-only, 1 vendor-only",
-          "duration_ms": 23.86,
+          "duration_ms": 79.26,
           "tool_calls": []
         },
         {
@@ -364,7 +364,7 @@
           "name": "compare internal and vendor prices",
           "status": "success",
           "detail": "",
-          "duration_ms": 4.32,
+          "duration_ms": 5.8,
           "tool_calls": []
         },
         {
@@ -372,7 +372,7 @@
           "name": "calculate percentage difference",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.84,
+          "duration_ms": 1.8,
           "tool_calls": [
             {
               "tool": "calculator",
@@ -383,7 +383,7 @@
               },
               "status": "success",
               "summary": "series of 8 values",
-              "duration_ms": 1.1,
+              "duration_ms": 1.04,
               "attempts": 1,
               "error": null
             }
@@ -394,7 +394,7 @@
           "name": "flag exceptions",
           "status": "success",
           "detail": "",
-          "duration_ms": 3.08,
+          "duration_ms": 3.33,
           "tool_calls": []
         }
       ],
@@ -411,7 +411,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 41.16,
+      "duration_ms": 99.08,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -535,7 +535,7 @@
           "name": "Read file",
           "status": "success",
           "detail": "8 rows, columns: ['item_code', 'title', 'cat', 'mat', 'colour', 'qty']",
-          "duration_ms": 5.11,
+          "duration_ms": 3.52,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -545,7 +545,7 @@
               },
               "status": "success",
               "summary": "table with 8 rows, 6 columns",
-              "duration_ms": 4.75,
+              "duration_ms": 3.44,
               "attempts": 1,
               "error": null
             }
@@ -556,7 +556,7 @@
           "name": "detect columns",
           "status": "success",
           "detail": "detected: item_code->sku, title->product_name, cat->category, mat->material, colour->color, qty->stock",
-          "duration_ms": 0.16,
+          "duration_ms": 0.14,
           "tool_calls": []
         },
         {
@@ -564,7 +564,7 @@
           "name": "normalize column names",
           "status": "success",
           "detail": "",
-          "duration_ms": 18.36,
+          "duration_ms": 28.53,
           "tool_calls": []
         },
         {
@@ -572,7 +572,7 @@
           "name": "validate required fields",
           "status": "success",
           "detail": "",
-          "duration_ms": 11.29,
+          "duration_ms": 23.41,
           "tool_calls": [
             {
               "tool": "data_validation",
@@ -589,7 +589,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 11.22,
+              "duration_ms": 23.32,
               "attempts": 1,
               "error": null
             }
@@ -600,7 +600,7 @@
           "name": "identify invalid rows",
           "status": "success",
           "detail": "",
-          "duration_ms": 4.58,
+          "duration_ms": 5.57,
           "tool_calls": []
         },
         {
@@ -608,7 +608,7 @@
           "name": "produce cleaned dataset",
           "status": "success",
           "detail": "",
-          "duration_ms": 25.18,
+          "duration_ms": 34.31,
           "tool_calls": [
             {
               "tool": "reporting",
@@ -651,7 +651,7 @@
               },
               "status": "success",
               "summary": "outputs\\wf003_cleaned_vendor_file.csv",
-              "duration_ms": 8.22,
+              "duration_ms": 10.22,
               "attempts": 1,
               "error": null
             },
@@ -694,7 +694,7 @@
               },
               "status": "success",
               "summary": "outputs\\wf003_invalid_rows.csv",
-              "duration_ms": 7.75,
+              "duration_ms": 6.25,
               "attempts": 1,
               "error": null
             }
@@ -714,7 +714,7 @@
         "outputs\\wf003_cleaned_vendor_file.csv",
         "outputs\\wf003_invalid_rows.csv"
       ],
-      "duration_ms": 74.3,
+      "duration_ms": 103.8,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -749,12 +749,12 @@
       "workflow_id": "WF004",
       "workflow_name": "Product Description Generator",
       "status": "success",
-      "summary": "Product Description: The Travel Backpack in sleek black offers a 20L capacity, perfect for frequent travelers seeking reliable storage. Its design balances durability and style for journeys of any length. [Missing information, not assumed: material.]\nShort Description: Black 20L Travel Backpack for frequent travelers.\nSeo Title: Black Travel Backpack \u2013 20L for Frequent Travelers\nMeta Description: Explore the black Travel Backpack with 20L capacity, designed for frequent travelers who need dependable, stylish storage.\nMissing product information (explicitly not invented): material",
+      "summary": "Product Description: The Travel Backpack is a black bag designed for frequent travelers. It offers a capacity of 20L. It belongs to the Bags category. [Missing information, not assumed: material.]\nShort Description: Black Travel Backpack for frequent travelers with 20L capacity.\nSeo Title: Travel Backpack - Black, 20L for Frequent Travelers\nMeta Description: The Travel Backpack is a black bag for frequent travelers, offering a 20L capacity.\nMissing product information (explicitly not invented): material",
       "data": {
-        "product_description": "The Travel Backpack in sleek black offers a 20L capacity, perfect for frequent travelers seeking reliable storage. Its design balances durability and style for journeys of any length. [Missing information, not assumed: material.]",
-        "short_description": "Black 20L Travel Backpack for frequent travelers.",
-        "seo_title": "Black Travel Backpack \u2013 20L for Frequent Travelers",
-        "meta_description": "Explore the black Travel Backpack with 20L capacity, designed for frequent travelers who need dependable, stylish storage.",
+        "product_description": "The Travel Backpack is a black bag designed for frequent travelers. It offers a capacity of 20L. It belongs to the Bags category. [Missing information, not assumed: material.]",
+        "short_description": "Black Travel Backpack for frequent travelers with 20L capacity.",
+        "seo_title": "Travel Backpack - Black, 20L for Frequent Travelers",
+        "meta_description": "The Travel Backpack is a black bag for frequent travelers, offering a 20L capacity.",
         "missing_information": [
           "material"
         ],
@@ -776,15 +776,15 @@
           "name": "Validate required attributes",
           "status": "success",
           "detail": "no product supplied -> using bundled sample product (data/mock/sample_product.json) | missing attributes: ['material']",
-          "duration_ms": 0.76,
+          "duration_ms": 0.6,
           "tool_calls": []
         },
         {
           "index": 1,
           "name": "create product description",
           "status": "success",
-          "detail": "",
-          "duration_ms": 1943.13,
+          "detail": "unsupported claims detected ['durability', 'perfect', 'reliable', 'sleek', 'stylish'] -> regenerating",
+          "duration_ms": 4301.75,
           "tool_calls": [
             {
               "tool": "llm",
@@ -796,7 +796,21 @@
               },
               "status": "success",
               "summary": "dict(source, content)",
-              "duration_ms": 1943.02,
+              "duration_ms": 1944.99,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "llm",
+              "args": {
+                "task": "product_content",
+                "facts": "<dict keys=['product_name', 'category', 'color', 'target_audience', 'attributes']>",
+                "system": "You write e-commerce copy. Use ONLY the facts provided. Never invent or assume attributes, specs, materials, benefits...",
+                "prompt": "Write JSON with keys product_description (2-3 sentences), short_description (<=110 chars), seo_title (<=60 chars), me..."
+              },
+              "status": "success",
+              "summary": "dict(source, content)",
+              "duration_ms": 2351.16,
               "attempts": 1,
               "error": null
             }
@@ -823,7 +837,7 @@
           "name": "generate meta description",
           "status": "success",
           "detail": "text validation passed",
-          "duration_ms": 0.15,
+          "duration_ms": 0.1,
           "tool_calls": [
             {
               "tool": "text_validation",
@@ -837,7 +851,7 @@
               },
               "status": "success",
               "summary": "dict(ok, issues, fields)",
-              "duration_ms": 0.06,
+              "duration_ms": 0.04,
               "attempts": 1,
               "error": null
             }
@@ -850,7 +864,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 1944.26,
+      "duration_ms": 4302.63,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -865,7 +879,7 @@
       "workflow_id": "WF005",
       "workflow_name": "Customer Order Status",
       "confidence": 0.99,
-      "reason": "User asks for the status of a specific order (ORD-1001), which matches the Customer Order Status workflow.",
+      "reason": "User asks for the status/location of a specific order, matching the Customer Order Status workflow.",
       "method": "llm",
       "alternatives": [
         {
@@ -911,7 +925,7 @@
           "name": "Validate identifier",
           "status": "success",
           "detail": "",
-          "duration_ms": 0.01,
+          "duration_ms": 0.22,
           "tool_calls": []
         },
         {
@@ -919,7 +933,7 @@
           "name": "search order data",
           "status": "success",
           "detail": "",
-          "duration_ms": 5.94,
+          "duration_ms": 7.97,
           "tool_calls": [
             {
               "tool": "order_api",
@@ -929,7 +943,7 @@
               },
               "status": "success",
               "summary": "1 items",
-              "duration_ms": 5.91,
+              "duration_ms": 7.92,
               "attempts": 1,
               "error": null
             }
@@ -948,7 +962,7 @@
           "name": "retrieve shipment information",
           "status": "success",
           "detail": "",
-          "duration_ms": 5.95,
+          "duration_ms": 5.59,
           "tool_calls": [
             {
               "tool": "shipment_lookup",
@@ -958,7 +972,7 @@
               },
               "status": "success",
               "summary": "dict(order_id, carrier, tracking_number, shipment_status, estimated_delivery)",
-              "duration_ms": 5.92,
+              "duration_ms": 5.52,
               "attempts": 1,
               "error": null
             }
@@ -986,7 +1000,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 12.06,
+      "duration_ms": 14.02,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -1001,7 +1015,7 @@
       "workflow_id": "WF006",
       "workflow_name": "Duplicate Product Detection",
       "confidence": 0.99,
-      "reason": "The request is to find likely duplicate products in the catalog, which directly matches the purpose of WF006 (Duplicate Product Detection).",
+      "reason": "User explicitly asks to find duplicate products, which matches the Duplicate Product Detection workflow (WF006).",
       "method": "llm",
       "alternatives": [
         {
@@ -1158,7 +1172,7 @@
           "name": "Load products",
           "status": "success",
           "detail": "",
-          "duration_ms": 4.45,
+          "duration_ms": 4.83,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -1167,7 +1181,7 @@
               },
               "status": "success",
               "summary": "table with 10 rows, 6 columns",
-              "duration_ms": 3.47,
+              "duration_ms": 3.82,
               "attempts": 1,
               "error": null
             },
@@ -1193,7 +1207,7 @@
           "name": "normalize names/SKUs",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.84,
+          "duration_ms": 1.81,
           "tool_calls": []
         },
         {
@@ -1201,7 +1215,7 @@
           "name": "compare identifiers",
           "status": "success",
           "detail": "",
-          "duration_ms": 6.45,
+          "duration_ms": 6.06,
           "tool_calls": []
         },
         {
@@ -1209,7 +1223,7 @@
           "name": "compare product attributes",
           "status": "success",
           "detail": "",
-          "duration_ms": 4.26,
+          "duration_ms": 24.89,
           "tool_calls": [
             {
               "tool": "pairwise_similarity",
@@ -1219,7 +1233,7 @@
               },
               "status": "success",
               "summary": "5 items",
-              "duration_ms": 0.39,
+              "duration_ms": 20.93,
               "attempts": 1,
               "error": null
             }
@@ -1238,7 +1252,7 @@
           "name": "assign confidence",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.13,
+          "duration_ms": 1.09,
           "tool_calls": []
         }
       ],
@@ -1252,7 +1266,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 18.43,
+      "duration_ms": 38.99,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -1266,8 +1280,8 @@
     "selection": {
       "workflow_id": "WF007",
       "workflow_name": "Marketing Campaign Brief",
-      "confidence": 0.98,
-      "reason": "User explicitly requests a campaign brief for a new collection, matching the Marketing Campaign Brief workflow.",
+      "confidence": 0.97,
+      "reason": "User wants to create a campaign brief, which matches the Marketing Campaign Brief workflow (WF007).",
       "method": "llm",
       "alternatives": [
         {
@@ -1352,7 +1366,7 @@
       ],
       "error": null,
       "artifacts": [],
-      "duration_ms": 0.1,
+      "duration_ms": 0.07,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -1540,7 +1554,7 @@
           "name": "Read keywords",
           "status": "success",
           "detail": "20 keywords read from column 'keyword'",
-          "duration_ms": 9.48,
+          "duration_ms": 8.62,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -1549,7 +1563,7 @@
               },
               "status": "success",
               "summary": "table with 20 rows, 1 columns",
-              "duration_ms": 2.86,
+              "duration_ms": 2.99,
               "attempts": 1,
               "error": null
             },
@@ -1566,7 +1580,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 2.22,
+              "duration_ms": 2.23,
               "attempts": 1,
               "error": null
             },
@@ -1577,7 +1591,7 @@
               },
               "status": "success",
               "summary": "table with 3 rows, 3 columns",
-              "duration_ms": 4.16,
+              "duration_ms": 3.18,
               "attempts": 1,
               "error": null
             }
@@ -1588,7 +1602,7 @@
           "name": "remove duplicates",
           "status": "success",
           "detail": "1 duplicate keyword(s) removed",
-          "duration_ms": 6.35,
+          "duration_ms": 13.72,
           "tool_calls": []
         },
         {
@@ -1596,7 +1610,7 @@
           "name": "classify search intent",
           "status": "success",
           "detail": "",
-          "duration_ms": 2851.81,
+          "duration_ms": 2740.0,
           "tool_calls": [
             {
               "tool": "llm",
@@ -1608,7 +1622,7 @@
               },
               "status": "success",
               "summary": "dict(source, content)",
-              "duration_ms": 2851.7,
+              "duration_ms": 2739.88,
               "attempts": 1,
               "error": null
             }
@@ -1619,7 +1633,7 @@
           "name": "map keywords to categories",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.5,
+          "duration_ms": 1.81,
           "tool_calls": []
         },
         {
@@ -1635,7 +1649,7 @@
           "name": "export results",
           "status": "success",
           "detail": "",
-          "duration_ms": 3.97,
+          "duration_ms": 4.12,
           "tool_calls": [
             {
               "tool": "reporting",
@@ -1645,7 +1659,7 @@
               },
               "status": "success",
               "summary": "outputs\\wf008_keyword_report.csv",
-              "duration_ms": 3.94,
+              "duration_ms": 4.08,
               "attempts": 1,
               "error": null
             }
@@ -1666,7 +1680,7 @@
       "artifacts": [
         "outputs\\wf008_keyword_report.csv"
       ],
-      "duration_ms": 2875.62,
+      "duration_ms": 2782.64,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -1767,7 +1781,7 @@
       ],
       "error": null,
       "artifacts": [],
-      "duration_ms": 0.06,
+      "duration_ms": 0.07,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -1781,8 +1795,8 @@
     "selection": {
       "workflow_id": "WF010",
       "workflow_name": "Workflow Performance Report",
-      "confidence": 0.95,
-      "reason": "The request asks for information on failing workflows, which matches WF010 that generates a performance report with metrics and problem areas.",
+      "confidence": 0.98,
+      "reason": "User asks for a report on failing workflows, which matches the Workflow Performance Report that provides performance metrics and problem areas.",
       "method": "llm",
       "alternatives": [
         {
@@ -1802,7 +1816,7 @@
       "workflow_id": "WF010",
       "workflow_name": "Workflow Performance Report",
       "status": "success",
-      "summary": "4 of 10 workflows flagged (failure rate > 10% or avg time > 8s).\n- WF002: 50.0% failures (6/12), avg 1.64s  FLAGGED (failure rate 50.0% > 10%)\n- WF004: 16.67% failures (2/12), avg 7.67s  FLAGGED (failure rate 16.67% > 10%)\n- WF003: 16.67% failures (2/12), avg 1.41s  FLAGGED (failure rate 16.67% > 10%)\n- WF005: 0.0% failures (0/12), avg 9.27s  FLAGGED (avg time 9.27s > 8s)\n- WF007: 0.0% failures (0/12), avg 6.33s\n- WF006: 0.0% failures (0/12), avg 2.58s\n- WF008: 0.0% failures (0/12), avg 1.77s\n- WF001: 0.0% failures (0/12), avg 1.15s\n- WF009: 0.0% failures (0/12), avg 0.99s\n- WF010: 0.0% failures (0/4), avg 0.92s\nTop errors: Invalid price format x4; LLM timeout x2; Missing required column: sku x2\nSlow steps: WF005.shipment_lookup 6.6s; WF004.llm_generate 5.44s; WF007.llm_messaging 4.34s\nRecommendations:\n  * Add automated validation for price fields to eliminate \"Invalid price format\" errors and reduce WF002 failures\n  * Implement pre\u2011run checks for required columns (e.g., sku) and vendor file presence to stop \"Missing required column\" and \"Vendor price file missing\" errors\n  * Increase LLM request timeout or add retry/back\u2011off logic to mitigate \"LLM timeout\" failures in WF004 and WF007\n  * Reduce WF002 failure rate by adding idempotent retry logic and detailed error logging for the failing steps\n  * Investigate and refactor the \"shipment_lookup\" step in WF005 to lower its average time (6.6\u202fs) and bring total workflow time under the 8\u202fs threshold\n  * Optimize the \"llm_generate\" step in WF004 (5.44\u202fs) by caching prompts or using a smaller model to improve overall latency\n  * Set up monitoring alerts for any workflow whose failure_rate exceeds 10\u202f% or avg_execution_time exceeds 8\u202fs\n  * Create a post\u2011run report that aggregates frequent error types and triggers targeted remediation tickets\nReport: outputs\\wf010_performance_report.json",
+      "summary": "4 of 10 workflows flagged (failure rate > 10% or avg time > 8s).\n- WF002: 50.0% failures (6/12), avg 1.64s  FLAGGED (failure rate 50.0% > 10%)\n- WF004: 16.67% failures (2/12), avg 7.67s  FLAGGED (failure rate 16.67% > 10%)\n- WF003: 16.67% failures (2/12), avg 1.41s  FLAGGED (failure rate 16.67% > 10%)\n- WF005: 0.0% failures (0/12), avg 9.27s  FLAGGED (avg time 9.27s > 8s)\n- WF007: 0.0% failures (0/12), avg 6.33s\n- WF006: 0.0% failures (0/12), avg 2.58s\n- WF008: 0.0% failures (0/12), avg 1.77s\n- WF001: 0.0% failures (0/12), avg 1.15s\n- WF009: 0.0% failures (0/12), avg 0.99s\n- WF010: 0.0% failures (0/4), avg 0.92s\nTop errors: Invalid price format x4; LLM timeout x2; Missing required column: sku x2\nSlow steps: WF005.shipment_lookup 6.6s; WF004.llm_generate 5.44s; WF007.llm_messaging 4.34s\nRecommendations:\n  * Investigate WF002 root cause; add detailed logging, retry logic, and validate upstream data to lower its 50% failure rate.\n  * Fix data quality for WF003 and WF004 (invalid price format, missing SKU, missing vendor file) and add pre\u2011run validation to bring failure rates below 10%.\n  * Profile and optimize WF005 execution; specifically improve the shipment_lookup step via caching, parallelism, or increased resources to reduce avg time below 8\u202fs.\n  * Implement strict schema validation and sanitization for price fields to eliminate \"Invalid price format\" errors.\n  * Add pre\u2011flight checks for required columns (e.g., sku) and vendor price file existence to prevent missing\u2011column and missing\u2011file failures.\n  * Increase LLM timeout settings or simplify prompts to reduce LLM timeout occurrences; monitor LLM latency.\n  * Configure automated alerts when failure_rate >10% or avg_execution_time >8\u202fs for any workflow.\n  * Review and optimize slow steps such as llm_generate in WF004 and llm_messaging in WF007 (e.g., batch requests, use faster model variants).\nReport: outputs\\wf010_performance_report.json",
       "data": {
         "thresholds": {
           "failure_rate_percent": 10.0,
@@ -1966,14 +1980,14 @@
           }
         ],
         "recommendations": [
-          "Add automated validation for price fields to eliminate \"Invalid price format\" errors and reduce WF002 failures",
-          "Implement pre\u2011run checks for required columns (e.g., sku) and vendor file presence to stop \"Missing required column\" and \"Vendor price file missing\" errors",
-          "Increase LLM request timeout or add retry/back\u2011off logic to mitigate \"LLM timeout\" failures in WF004 and WF007",
-          "Reduce WF002 failure rate by adding idempotent retry logic and detailed error logging for the failing steps",
-          "Investigate and refactor the \"shipment_lookup\" step in WF005 to lower its average time (6.6\u202fs) and bring total workflow time under the 8\u202fs threshold",
-          "Optimize the \"llm_generate\" step in WF004 (5.44\u202fs) by caching prompts or using a smaller model to improve overall latency",
-          "Set up monitoring alerts for any workflow whose failure_rate exceeds 10\u202f% or avg_execution_time exceeds 8\u202fs",
-          "Create a post\u2011run report that aggregates frequent error types and triggers targeted remediation tickets"
+          "Investigate WF002 root cause; add detailed logging, retry logic, and validate upstream data to lower its 50% failure rate.",
+          "Fix data quality for WF003 and WF004 (invalid price format, missing SKU, missing vendor file) and add pre\u2011run validation to bring failure rates below 10%.",
+          "Profile and optimize WF005 execution; specifically improve the shipment_lookup step via caching, parallelism, or increased resources to reduce avg time below 8\u202fs.",
+          "Implement strict schema validation and sanitization for price fields to eliminate \"Invalid price format\" errors.",
+          "Add pre\u2011flight checks for required columns (e.g., sku) and vendor price file existence to prevent missing\u2011column and missing\u2011file failures.",
+          "Increase LLM timeout settings or simplify prompts to reduce LLM timeout occurrences; monitor LLM latency.",
+          "Configure automated alerts when failure_rate >10% or avg_execution_time >8\u202fs for any workflow.",
+          "Review and optimize slow steps such as llm_generate in WF004 and llm_messaging in WF007 (e.g., batch requests, use faster model variants)."
         ]
       },
       "steps": [
@@ -1982,7 +1996,7 @@
           "name": "Load execution logs",
           "status": "success",
           "detail": "327 log rows, 112 runs",
-          "duration_ms": 7.98,
+          "duration_ms": 12.28,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -1991,7 +2005,7 @@
               },
               "status": "success",
               "summary": "table with 327 rows, 7 columns",
-              "duration_ms": 5.39,
+              "duration_ms": 8.06,
               "attempts": 1,
               "error": null
             },
@@ -2007,7 +2021,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 0.51,
+              "duration_ms": 0.85,
               "attempts": 1,
               "error": null
             }
@@ -2018,7 +2032,7 @@
           "name": "calculate success/failure rate",
           "status": "success",
           "detail": "",
-          "duration_ms": 60.67,
+          "duration_ms": 65.83,
           "tool_calls": [
             {
               "tool": "calculator",
@@ -2120,7 +2134,7 @@
               },
               "status": "success",
               "summary": "16.666666666666664",
-              "duration_ms": 0.0,
+              "duration_ms": 0.01,
               "attempts": 1,
               "error": null
             },
@@ -2250,7 +2264,7 @@
               },
               "status": "success",
               "summary": "0.0",
-              "duration_ms": 0.0,
+              "duration_ms": 0.02,
               "attempts": 1,
               "error": null
             },
@@ -2287,7 +2301,7 @@
           "name": "calculate average execution time",
           "status": "success",
           "detail": "",
-          "duration_ms": 3.94,
+          "duration_ms": 3.39,
           "tool_calls": [
             {
               "tool": "calculator",
@@ -2297,7 +2311,7 @@
               },
               "status": "success",
               "summary": "1.1541666666666668",
-              "duration_ms": 0.29,
+              "duration_ms": 0.24,
               "attempts": 1,
               "error": null
             },
@@ -2309,7 +2323,7 @@
               },
               "status": "success",
               "summary": "1.6433333333333335",
-              "duration_ms": 0.15,
+              "duration_ms": 0.13,
               "attempts": 1,
               "error": null
             },
@@ -2321,7 +2335,7 @@
               },
               "status": "success",
               "summary": "1.4058333333333335",
-              "duration_ms": 0.12,
+              "duration_ms": 0.15,
               "attempts": 1,
               "error": null
             },
@@ -2357,7 +2371,7 @@
               },
               "status": "success",
               "summary": "2.575",
-              "duration_ms": 0.11,
+              "duration_ms": 0.12,
               "attempts": 1,
               "error": null
             },
@@ -2381,7 +2395,7 @@
               },
               "status": "success",
               "summary": "1.7675",
-              "duration_ms": 0.13,
+              "duration_ms": 0.11,
               "attempts": 1,
               "error": null
             },
@@ -2416,7 +2430,7 @@
           "name": "identify frequent errors",
           "status": "success",
           "detail": "",
-          "duration_ms": 17.75,
+          "duration_ms": 18.31,
           "tool_calls": []
         },
         {
@@ -2424,7 +2438,7 @@
           "name": "identify slow steps",
           "status": "success",
           "detail": "",
-          "duration_ms": 16.62,
+          "duration_ms": 21.48,
           "tool_calls": []
         },
         {
@@ -2432,7 +2446,7 @@
           "name": "generate recommendations",
           "status": "success",
           "detail": "",
-          "duration_ms": 3774.17,
+          "duration_ms": 2133.36,
           "tool_calls": [
             {
               "tool": "llm",
@@ -2444,7 +2458,7 @@
               },
               "status": "success",
               "summary": "dict(source, content)",
-              "duration_ms": 3772.51,
+              "duration_ms": 2131.52,
               "attempts": 1,
               "error": null
             },
@@ -2457,7 +2471,7 @@
               },
               "status": "success",
               "summary": "outputs\\wf010_performance_report.json",
-              "duration_ms": 1.25,
+              "duration_ms": 1.51,
               "attempts": 1,
               "error": null
             }
@@ -2482,7 +2496,7 @@
       "artifacts": [
         "outputs\\wf010_performance_report.json"
       ],
-      "duration_ms": 3881.56,
+      "duration_ms": 2255.18,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -2580,7 +2594,7 @@
           "name": "Load inventory",
           "status": "success",
           "detail": "10 inventory rows loaded",
-          "duration_ms": 17.22,
+          "duration_ms": 3.8,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -2589,7 +2603,7 @@
               },
               "status": "success",
               "summary": "table with 10 rows, 4 columns",
-              "duration_ms": 16.7,
+              "duration_ms": 3.36,
               "attempts": 1,
               "error": null
             },
@@ -2606,7 +2620,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 0.44,
+              "duration_ms": 0.38,
               "attempts": 1,
               "error": null
             }
@@ -2617,7 +2631,7 @@
           "name": "compare current stock with minimum threshold",
           "status": "success",
           "detail": "threshold overridden to 12 | 1 rows skipped (non-numeric stock)",
-          "duration_ms": 2.44,
+          "duration_ms": 2.54,
           "tool_calls": []
         },
         {
@@ -2625,7 +2639,7 @@
           "name": "identify low-stock products",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.21,
+          "duration_ms": 1.46,
           "tool_calls": []
         },
         {
@@ -2633,7 +2647,7 @@
           "name": "calculate reorder quantity",
           "status": "success",
           "detail": "",
-          "duration_ms": 2.04,
+          "duration_ms": 1.93,
           "tool_calls": [
             {
               "tool": "calculator",
@@ -2645,7 +2659,7 @@
               },
               "status": "success",
               "summary": "series of 6 values",
-              "duration_ms": 1.29,
+              "duration_ms": 1.24,
               "attempts": 1,
               "error": null
             }
@@ -2656,7 +2670,7 @@
           "name": "generate restock list",
           "status": "success",
           "detail": "",
-          "duration_ms": 3.96,
+          "duration_ms": 3.53,
           "tool_calls": []
         }
       ],
@@ -2673,7 +2687,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 27.14,
+      "duration_ms": 13.51,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -2797,7 +2811,7 @@
           "name": "Load product prices",
           "status": "success",
           "detail": "10 internal rows, 10 vendor rows",
-          "duration_ms": 31.33,
+          "duration_ms": 6.97,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -2806,7 +2820,7 @@
               },
               "status": "success",
               "summary": "table with 10 rows, 7 columns",
-              "duration_ms": 15.33,
+              "duration_ms": 3.46,
               "attempts": 1,
               "error": null
             },
@@ -2817,7 +2831,7 @@
               },
               "status": "success",
               "summary": "table with 10 rows, 3 columns",
-              "duration_ms": 15.27,
+              "duration_ms": 2.76,
               "attempts": 1,
               "error": null
             },
@@ -2832,7 +2846,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 0.37,
+              "duration_ms": 0.38,
               "attempts": 1,
               "error": null
             },
@@ -2847,7 +2861,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 0.26,
+              "duration_ms": 0.25,
               "attempts": 1,
               "error": null
             }
@@ -2858,7 +2872,7 @@
           "name": "match products by SKU",
           "status": "success",
           "detail": "9 matched, 1 internal-only, 1 vendor-only",
-          "duration_ms": 22.86,
+          "duration_ms": 22.72,
           "tool_calls": []
         },
         {
@@ -2866,7 +2880,7 @@
           "name": "compare internal and vendor prices",
           "status": "success",
           "detail": "",
-          "duration_ms": 4.35,
+          "duration_ms": 3.33,
           "tool_calls": []
         },
         {
@@ -2874,7 +2888,7 @@
           "name": "calculate percentage difference",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.57,
+          "duration_ms": 1.55,
           "tool_calls": [
             {
               "tool": "calculator",
@@ -2885,7 +2899,7 @@
               },
               "status": "success",
               "summary": "series of 8 values",
-              "duration_ms": 0.91,
+              "duration_ms": 0.88,
               "attempts": 1,
               "error": null
             }
@@ -2896,7 +2910,7 @@
           "name": "flag exceptions",
           "status": "success",
           "detail": "",
-          "duration_ms": 3.16,
+          "duration_ms": 2.97,
           "tool_calls": []
         }
       ],
@@ -2913,7 +2927,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 64.08,
+      "duration_ms": 38.2,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -2928,7 +2942,7 @@
       "workflow_id": "WF003",
       "workflow_name": "Vendor File Processing",
       "confidence": 0.98,
-      "reason": "User wants to process a vendor spreadsheet and see invalid rows, which matches the Vendor File Processing workflow.",
+      "reason": "User wants to process a vendor spreadsheet and see invalid rows, which directly matches the Vendor File Processing workflow.",
       "method": "llm",
       "alternatives": [
         {
@@ -3037,7 +3051,7 @@
           "name": "Read file",
           "status": "success",
           "detail": "8 rows, columns: ['item_code', 'title', 'cat', 'mat', 'colour', 'qty']",
-          "duration_ms": 28.07,
+          "duration_ms": 18.92,
           "tool_calls": [
             {
               "tool": "excel_parser",
@@ -3047,7 +3061,7 @@
               },
               "status": "success",
               "summary": "table with 8 rows, 6 columns",
-              "duration_ms": 27.99,
+              "duration_ms": 18.84,
               "attempts": 1,
               "error": null
             }
@@ -3066,7 +3080,7 @@
           "name": "normalize column names",
           "status": "success",
           "detail": "",
-          "duration_ms": 10.61,
+          "duration_ms": 9.51,
           "tool_calls": []
         },
         {
@@ -3074,7 +3088,7 @@
           "name": "validate required fields",
           "status": "success",
           "detail": "",
-          "duration_ms": 4.58,
+          "duration_ms": 4.39,
           "tool_calls": [
             {
               "tool": "data_validation",
@@ -3091,7 +3105,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 4.52,
+              "duration_ms": 4.32,
               "attempts": 1,
               "error": null
             }
@@ -3102,7 +3116,7 @@
           "name": "identify invalid rows",
           "status": "success",
           "detail": "",
-          "duration_ms": 4.2,
+          "duration_ms": 3.0,
           "tool_calls": []
         },
         {
@@ -3110,7 +3124,7 @@
           "name": "produce cleaned dataset",
           "status": "success",
           "detail": "",
-          "duration_ms": 16.53,
+          "duration_ms": 17.11,
           "tool_calls": [
             {
               "tool": "reporting",
@@ -3153,7 +3167,7 @@
               },
               "status": "success",
               "summary": "outputs\\wf003_cleaned_vendor_file.csv",
-              "duration_ms": 3.95,
+              "duration_ms": 4.3,
               "attempts": 1,
               "error": null
             },
@@ -3196,7 +3210,7 @@
               },
               "status": "success",
               "summary": "outputs\\wf003_invalid_rows.csv",
-              "duration_ms": 5.14,
+              "duration_ms": 6.33,
               "attempts": 1,
               "error": null
             }
@@ -3214,7 +3228,7 @@
         "outputs\\wf003_cleaned_vendor_file.csv",
         "outputs\\wf003_invalid_rows.csv"
       ],
-      "duration_ms": 71.53,
+      "duration_ms": 60.75,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -3257,7 +3271,7 @@
           "name": "Read file",
           "status": "failed",
           "detail": "",
-          "duration_ms": 0.42,
+          "duration_ms": 0.47,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -3267,7 +3281,7 @@
               },
               "status": "failed",
               "summary": "",
-              "duration_ms": 0.38,
+              "duration_ms": 0.42,
               "attempts": 1,
               "error": "FileNotFoundError: Data file not found: data/mock/does_not_exist.csv"
             }
@@ -3322,7 +3336,7 @@
       "missing": [],
       "error": "FileNotFoundError: Data file not found: data/mock/does_not_exist.csv",
       "artifacts": [],
-      "duration_ms": 0.52,
+      "duration_ms": 0.58,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -3357,12 +3371,12 @@
       "workflow_id": "WF004",
       "workflow_name": "Product Description Generator",
       "status": "success",
-      "summary": "Product Description: The Travel Backpack is a sleek black nylon bag designed for frequent travelers. It offers a 20L capacity, providing ample space for essentials on the go. Its durable construction ensures reliable performance on any journey.\nShort Description: Black nylon Travel Backpack with 20L capacity for frequent travelers.\nSeo Title: Travel Backpack \u2013 Black Nylon 20L for Frequent Travelers\nMeta Description: Explore the world with the black nylon Travel Backpack, offering 20L capacity for frequent travelers seeking reliable, spacious gear.",
+      "summary": "Product Description: The Travel Backpack is a black nylon bag designed for frequent travelers. It offers a capacity of 20L. It belongs to the Bags category.\nShort Description: Black nylon Travel Backpack with 20L capacity for frequent travelers.\nSeo Title: Travel Backpack \u2013 Black Nylon 20L for Travelers\nMeta Description: The Travel Backpack is a black nylon bag in the Bags category, offering a 20L capacity for frequent travelers.",
       "data": {
-        "product_description": "The Travel Backpack is a sleek black nylon bag designed for frequent travelers. It offers a 20L capacity, providing ample space for essentials on the go. Its durable construction ensures reliable performance on any journey.",
+        "product_description": "The Travel Backpack is a black nylon bag designed for frequent travelers. It offers a capacity of 20L. It belongs to the Bags category.",
         "short_description": "Black nylon Travel Backpack with 20L capacity for frequent travelers.",
-        "seo_title": "Travel Backpack \u2013 Black Nylon 20L for Frequent Travelers",
-        "meta_description": "Explore the world with the black nylon Travel Backpack, offering 20L capacity for frequent travelers seeking reliable, spacious gear.",
+        "seo_title": "Travel Backpack \u2013 Black Nylon 20L for Travelers",
+        "meta_description": "The Travel Backpack is a black nylon bag in the Bags category, offering a 20L capacity for frequent travelers.",
         "missing_information": [],
         "generated_by": "llm:openai/gpt-oss-120b",
         "used_sample_product": false,
@@ -3390,8 +3404,8 @@
           "index": 1,
           "name": "create product description",
           "status": "success",
-          "detail": "",
-          "duration_ms": 2590.93,
+          "detail": "unsupported claims detected ['ample', 'durable', 'perfect', 'reliable', 'sleek', 'stylish'] -> regenerating",
+          "duration_ms": 16180.17,
           "tool_calls": [
             {
               "tool": "llm",
@@ -3403,7 +3417,21 @@
               },
               "status": "success",
               "summary": "dict(source, content)",
-              "duration_ms": 2590.85,
+              "duration_ms": 3891.5,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "llm",
+              "args": {
+                "task": "product_content",
+                "facts": "<dict keys=['product_name', 'category', 'material', 'color', 'target_audience', 'attributes']>",
+                "system": "You write e-commerce copy. Use ONLY the facts provided. Never invent or assume attributes, specs, materials, benefits...",
+                "prompt": "Write JSON with keys product_description (2-3 sentences), short_description (<=110 chars), seo_title (<=60 chars), me..."
+              },
+              "status": "success",
+              "summary": "dict(source, content)",
+              "duration_ms": 12288.36,
               "attempts": 1,
               "error": null
             }
@@ -3414,7 +3442,7 @@
           "name": "generate short description",
           "status": "success",
           "detail": "short_description produced in the same structured LLM call",
-          "duration_ms": 0.0,
+          "duration_ms": 0.01,
           "tool_calls": []
         },
         {
@@ -3430,7 +3458,7 @@
           "name": "generate meta description",
           "status": "success",
           "detail": "text validation passed",
-          "duration_ms": 0.11,
+          "duration_ms": 1.46,
           "tool_calls": [
             {
               "tool": "text_validation",
@@ -3444,7 +3472,7 @@
               },
               "status": "success",
               "summary": "dict(ok, issues, fields)",
-              "duration_ms": 0.07,
+              "duration_ms": 1.38,
               "attempts": 1,
               "error": null
             }
@@ -3466,7 +3494,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 2591.19,
+      "duration_ms": 16181.82,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -3481,7 +3509,7 @@
       "workflow_id": "WF005",
       "workflow_name": "Customer Order Status",
       "confidence": 0.99,
-      "reason": "User asks for the status of a specific order, which matches the Customer Order Status workflow (WF005).",
+      "reason": "User asks for the status of a specific order (ORD-9999), which matches the Customer Order Status workflow.",
       "method": "llm",
       "alternatives": [
         {
@@ -3517,7 +3545,7 @@
           "name": "search order data",
           "status": "blocked",
           "detail": "",
-          "duration_ms": 26.09,
+          "duration_ms": 7.35,
           "tool_calls": [
             {
               "tool": "order_api",
@@ -3527,7 +3555,7 @@
               },
               "status": "success",
               "summary": "0 items",
-              "duration_ms": 26.02,
+              "duration_ms": 7.29,
               "attempts": 1,
               "error": null
             }
@@ -3573,7 +3601,7 @@
       ],
       "error": null,
       "artifacts": [],
-      "duration_ms": 26.27,
+      "duration_ms": 7.49,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -3656,7 +3684,7 @@
           "name": "search order data",
           "status": "success",
           "detail": "",
-          "duration_ms": 7.03,
+          "duration_ms": 6.04,
           "tool_calls": [
             {
               "tool": "order_api",
@@ -3666,7 +3694,7 @@
               },
               "status": "success",
               "summary": "2 items",
-              "duration_ms": 6.99,
+              "duration_ms": 6.01,
               "attempts": 1,
               "error": null
             }
@@ -3685,7 +3713,7 @@
           "name": "retrieve shipment information",
           "status": "success",
           "detail": "",
-          "duration_ms": 31.56,
+          "duration_ms": 10.26,
           "tool_calls": [
             {
               "tool": "shipment_lookup",
@@ -3695,7 +3723,7 @@
               },
               "status": "success",
               "summary": "dict(order_id, carrier, tracking_number, shipment_status, estimated_delivery)",
-              "duration_ms": 23.19,
+              "duration_ms": 5.18,
               "attempts": 1,
               "error": null
             },
@@ -3707,7 +3735,7 @@
               },
               "status": "success",
               "summary": "dict(order_id, carrier, tracking_number, shipment_status, estimated_delivery)",
-              "duration_ms": 8.29,
+              "duration_ms": 5.01,
               "attempts": 1,
               "error": null
             }
@@ -3718,7 +3746,7 @@
           "name": "summarize current status",
           "status": "success",
           "detail": "",
-          "duration_ms": 0.02,
+          "duration_ms": 0.01,
           "tool_calls": []
         }
       ],
@@ -3735,7 +3763,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 38.83,
+      "duration_ms": 16.49,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -3797,7 +3825,7 @@
           "name": "search order data",
           "status": "success",
           "detail": "",
-          "duration_ms": 6.32,
+          "duration_ms": 7.0,
           "tool_calls": [
             {
               "tool": "order_api",
@@ -3807,7 +3835,7 @@
               },
               "status": "success",
               "summary": "1 items",
-              "duration_ms": 6.29,
+              "duration_ms": 6.96,
               "attempts": 1,
               "error": null
             }
@@ -3826,7 +3854,7 @@
           "name": "retrieve shipment information",
           "status": "success",
           "detail": "",
-          "duration_ms": 7.78,
+          "duration_ms": 5.57,
           "tool_calls": [
             {
               "tool": "shipment_lookup",
@@ -3836,7 +3864,7 @@
               },
               "status": "success",
               "summary": "None",
-              "duration_ms": 7.75,
+              "duration_ms": 5.53,
               "attempts": 1,
               "error": null
             }
@@ -3864,7 +3892,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 14.26,
+      "duration_ms": 12.78,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -3878,8 +3906,8 @@
     "selection": {
       "workflow_id": "WF005",
       "workflow_name": "Customer Order Status",
-      "confidence": 0.99,
-      "reason": "User is asking for the status of a specific order (order 12), which matches the Customer Order Status workflow.",
+      "confidence": 0.98,
+      "reason": "User asks for the status of order 12, which matches the Customer Order Status workflow.",
       "method": "llm",
       "alternatives": [
         {
@@ -3958,7 +3986,7 @@
       ],
       "error": null,
       "artifacts": [],
-      "duration_ms": 0.13,
+      "duration_ms": 0.14,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -3973,7 +4001,7 @@
       "workflow_id": "WF007",
       "workflow_name": "Marketing Campaign Brief",
       "confidence": 0.98,
-      "reason": "User requests a marketing campaign brief with goal, dates, target audience, and promotion, which matches WF007",
+      "reason": "User explicitly requests a marketing campaign brief with details matching WF007 trigger",
       "method": "llm",
       "alternatives": [
         {
@@ -4088,7 +4116,7 @@
           "name": "summarize products",
           "status": "success",
           "detail": "products from request",
-          "duration_ms": 26.38,
+          "duration_ms": 28.84,
           "tool_calls": [
             {
               "tool": "product_data_reader",
@@ -4100,7 +4128,7 @@
               },
               "status": "success",
               "summary": "table with 0 rows, 7 columns",
-              "duration_ms": 25.16,
+              "duration_ms": 27.67,
               "attempts": 1,
               "error": null
             }
@@ -4111,7 +4139,7 @@
           "name": "create messaging",
           "status": "success",
           "detail": "",
-          "duration_ms": 3137.57,
+          "duration_ms": 2938.7,
           "tool_calls": [
             {
               "tool": "llm",
@@ -4123,7 +4151,7 @@
               },
               "status": "success",
               "summary": "dict(source, content)",
-              "duration_ms": 3137.45,
+              "duration_ms": 2938.62,
               "attempts": 1,
               "error": null
             }
@@ -4134,7 +4162,7 @@
           "name": "create channel recommendations",
           "status": "success",
           "detail": "",
-          "duration_ms": 0.02,
+          "duration_ms": 0.03,
           "tool_calls": []
         },
         {
@@ -4142,7 +4170,7 @@
           "name": "create campaign checklist",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.69,
+          "duration_ms": 2.24,
           "tool_calls": []
         }
       ],
@@ -4163,7 +4191,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 3165.92,
+      "duration_ms": 2970.1,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -4178,7 +4206,7 @@
       "workflow_id": "WF009",
       "workflow_name": "Employee Task Assignment",
       "confidence": 0.97,
-      "reason": "The request asks to assign an urgent task to the best available developer by a specific deadline, which aligns with the Employee Task Assignment workflow (WF009).",
+      "reason": "The request is to assign an urgent task to the best available developer by a deadline, which matches the Employee Task Assignment workflow.",
       "method": "llm",
       "alternatives": [
         {
@@ -4266,7 +4294,7 @@
           "name": "Understand task requirements",
           "status": "success",
           "detail": "required skills: ['api', 'backend', 'database', 'python']; priority: urgent",
-          "duration_ms": 23.95,
+          "duration_ms": 5.77,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -4275,7 +4303,7 @@
               },
               "status": "success",
               "summary": "table with 6 rows, 6 columns",
-              "duration_ms": 21.7,
+              "duration_ms": 3.52,
               "attempts": 1,
               "error": null
             },
@@ -4293,7 +4321,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 0.55,
+              "duration_ms": 0.44,
               "attempts": 1,
               "error": null
             }
@@ -4304,7 +4332,7 @@
           "name": "compare employee skills",
           "status": "success",
           "detail": "",
-          "duration_ms": 4.62,
+          "duration_ms": 15.69,
           "tool_calls": []
         },
         {
@@ -4312,7 +4340,7 @@
           "name": "check current workload",
           "status": "success",
           "detail": "",
-          "duration_ms": 1.19,
+          "duration_ms": 0.96,
           "tool_calls": []
         },
         {
@@ -4320,7 +4348,7 @@
           "name": "rank candidates",
           "status": "success",
           "detail": "",
-          "duration_ms": 0.07,
+          "duration_ms": 0.05,
           "tool_calls": [
             {
               "tool": "ranking_logic",
@@ -4394,7 +4422,7 @@
           "name": "generate assignment summary",
           "status": "success",
           "detail": "",
-          "duration_ms": 0.03,
+          "duration_ms": 0.02,
           "tool_calls": []
         }
       ],
@@ -4412,7 +4440,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 30.21,
+      "duration_ms": 22.66,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -4498,7 +4526,7 @@
           "name": "Understand task requirements",
           "status": "success",
           "detail": "required skills: ['computer vision']; priority: urgent",
-          "duration_ms": 4.3,
+          "duration_ms": 4.02,
           "tool_calls": [
             {
               "tool": "csv_reader",
@@ -4507,7 +4535,7 @@
               },
               "status": "success",
               "summary": "table with 6 rows, 6 columns",
-              "duration_ms": 3.23,
+              "duration_ms": 3.06,
               "attempts": 1,
               "error": null
             },
@@ -4525,7 +4553,7 @@
               },
               "status": "success",
               "summary": "dict(valid_mask, reasons)",
-              "duration_ms": 0.42,
+              "duration_ms": 0.36,
               "attempts": 1,
               "error": null
             }
@@ -4536,7 +4564,7 @@
           "name": "compare employee skills",
           "status": "success",
           "detail": "",
-          "duration_ms": 3.56,
+          "duration_ms": 2.52,
           "tool_calls": []
         },
         {
@@ -4552,7 +4580,7 @@
           "name": "rank candidates",
           "status": "success",
           "detail": "",
-          "duration_ms": 0.04,
+          "duration_ms": 0.06,
           "tool_calls": [
             {
               "tool": "ranking_logic",
@@ -4599,7 +4627,7 @@
               },
               "status": "success",
               "summary": "3 items",
-              "duration_ms": 0.01,
+              "duration_ms": 0.02,
               "attempts": 1,
               "error": null
             }
@@ -4638,7 +4666,7 @@
       "missing": [],
       "error": null,
       "artifacts": [],
-      "duration_ms": 9.1,
+      "duration_ms": 7.82,
       "llm_mode": "llm:openai/gpt-oss-120b"
     }
   },
@@ -4653,7 +4681,7 @@
       "workflow_id": null,
       "workflow_name": null,
       "confidence": 0.1,
-      "reason": "User greeting does not match any defined workflow triggers",
+      "reason": "User greeting does not match any workflow trigger",
       "method": "llm",
       "alternatives": [],
       "clarification": "None of the available workflows match your request. Available: Inventory Restock Check, Product Price Validation, Vendor File Processing, Product Description Generator, Customer Order Status, Duplicate Product Detection, Marketing Campaign Brief, SEO Keyword Classification, Employee Task Assignment, Workflow Performance Report"
