@@ -1,0 +1,6 @@
+order_id,customer_email,items,status
+ORD-1001,alice@example.com,Wireless Mouse;USB-C Hub,Shipped
+ORD-1002,bob@example.com,Mechanical Keyboard,Processing
+ORD-1003,carol@example.com,Webcam HD,Delivered
+ORD-1004,alice@example.com,Desk Organizer,Shipped
+ORD-1005,dave@example.com,Travel Backpack,Cancelled

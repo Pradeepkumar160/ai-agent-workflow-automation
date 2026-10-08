@@ -1,0 +1,4 @@
+order_id,carrier,tracking_number,shipment_status,estimated_delivery
+ORD-1001,BlueDart,TRK1001,In Transit,2026-10-09
+ORD-1003,Delhivery,TRK1003,Delivered,2026-10-03
+ORD-1004,BlueDart,TRK1004,Out for Delivery,2026-10-07

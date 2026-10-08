@@ -1,0 +1,4 @@
+source_row,sku,product_name,category,material,color,stock,reason
+4,V-003,,Accessories,Plastic,Red,12,missing product_name
+5,,Desk Lamp,Accessories,Metal,White,7,missing sku
+7,,,Misc,,,3,missing sku; missing product_name

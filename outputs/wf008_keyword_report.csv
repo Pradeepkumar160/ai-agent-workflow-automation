@@ -1,0 +1,20 @@
+keyword,intent,category,priority,recommended_target_page
+best mechanical keyboard 2026,commercial,Electronics,high,Category page -> /collections/electronics
+best travel backpack for carry on,commercial,Bags,high,Category page -> /collections/bags
+buy wireless mouse online,transactional,Electronics,high,Category / product page -> /collections/electronics
+canvas tote bag buy,transactional,Bags,high,Category / product page -> /collections/bags
+cheap laptop stand deals,transactional,Electronics,high,Category / product page -> /collections/electronics
+laptop stand near me,transactional,Electronics,high,Category / product page -> /collections/electronics
+travel backpack,commercial,Bags,high,Category page -> /collections/bags
+usb-c hub price,commercial,Electronics,high,Category page -> /collections/electronics
+webcam hd,commercial,Electronics,high,Category page -> /collections/electronics
+wireless mouse,commercial,Electronics,high,Category page -> /collections/electronics
+desk organizer ideas,informational,Accessories,medium,Blog / guide page -> /collections/accessories
+how to clean a mechanical keyboard,informational,Electronics,medium,Blog / guide page -> /collections/electronics
+how to remove odor from water bottle,informational,Accessories,medium,Blog / guide page -> /collections/accessories
+steel water bottle review,informational,Accessories,medium,Blog / guide page -> /collections/accessories
+usb c hub vs docking station,informational,Electronics,medium,Blog / guide page -> /collections/electronics
+what size backpack for flights,informational,Bags,medium,Blog / guide page -> /collections/bags
+yoga mat,commercial,Unmapped,medium,Unmapped - needs manual review
+techstore login,navigational,Unmapped,low,Home or account page
+techstore official website,navigational,Unmapped,low,Home or account page

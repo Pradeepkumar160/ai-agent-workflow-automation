@@ -1,0 +1,4663 @@
+[
+  {
+    "case": 1,
+    "label": "Excel test question for WF001",
+    "expected_workflow": "WF001",
+    "selected_workflow": "WF001",
+    "routing_correct": true,
+    "request": "Which products need restocking?",
+    "selection": {
+      "workflow_id": "WF001",
+      "workflow_name": "Inventory Restock Check",
+      "confidence": 0.99,
+      "reason": "User asks which products need restocking, matching WF001 trigger",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.758
+        },
+        {
+          "workflow_id": "WF004",
+          "workflow_name": "Product Description Generator",
+          "score": 0.758
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF001",
+      "workflow_name": "Inventory Restock Check",
+      "status": "success",
+      "summary": "4 of 9 products need restocking:\n- SKU-006 Laptop Stand: stock 0 < min 5 -> reorder 10\n- SKU-003 USB-C Hub: stock 2 < min 8 -> reorder 14\n- SKU-008 Canvas Tote Bag: stock 3 < min 12 -> reorder 21\n- SKU-001 Wireless Mouse: stock 4 < min 10 -> reorder 16\n1 row(s) skipped due to invalid stock data: SKU-010",
+      "data": {
+        "rule": "restock if current_stock < minimum_stock",
+        "reorder_rule": "restock up to 2 x minimum stock",
+        "products_checked": 9,
+        "restock_count": 4,
+        "items": [
+          {
+            "sku": "SKU-006",
+            "product_name": "Laptop Stand",
+            "current_stock": 0,
+            "minimum_stock": 5,
+            "reorder_quantity": 10
+          },
+          {
+            "sku": "SKU-003",
+            "product_name": "USB-C Hub",
+            "current_stock": 2,
+            "minimum_stock": 8,
+            "reorder_quantity": 14
+          },
+          {
+            "sku": "SKU-008",
+            "product_name": "Canvas Tote Bag",
+            "current_stock": 3,
+            "minimum_stock": 12,
+            "reorder_quantity": 21
+          },
+          {
+            "sku": "SKU-001",
+            "product_name": "Wireless Mouse",
+            "current_stock": 4,
+            "minimum_stock": 10,
+            "reorder_quantity": 16
+          }
+        ],
+        "skipped_rows": [
+          {
+            "sku": "SKU-010",
+            "reason": "non-numeric stock values (nan/5)"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Load inventory",
+          "status": "success",
+          "detail": "10 inventory rows loaded",
+          "duration_ms": 8.84,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/inventory.csv"
+              },
+              "status": "success",
+              "summary": "table with 10 rows, 4 columns",
+              "duration_ms": 8.25,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 10x4>",
+                "required_columns": [
+                  "sku",
+                  "product_name",
+                  "current_stock",
+                  "minimum_stock"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.5,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "compare current stock with minimum threshold",
+          "status": "success",
+          "detail": "1 rows skipped (non-numeric stock)",
+          "duration_ms": 6.21,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "identify low-stock products",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.13,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "calculate reorder quantity",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 2.37,
+          "tool_calls": [
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "reorder_quantity",
+                "current": "<series n=4>",
+                "minimum": "<series n=4>",
+                "multiplier": "2.0"
+              },
+              "status": "success",
+              "summary": "series of 4 values",
+              "duration_ms": 1.48,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "generate restock list",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3.79,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "inventory_path": "data/mock/inventory.csv",
+        "reorder_multiplier": 2
+      },
+      "defaults_used": [
+        "inventory_path",
+        "reorder_multiplier"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 22.85,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 2,
+    "label": "Excel test question for WF002",
+    "expected_workflow": "WF002",
+    "selected_workflow": "WF002",
+    "routing_correct": true,
+    "request": "Find products where vendor price differs by more than 10%.",
+    "selection": {
+      "workflow_id": "WF002",
+      "workflow_name": "Product Price Validation",
+      "confidence": 0.97,
+      "reason": "The request is to compare product prices with vendor prices and identify differences over 10%, which aligns directly with the Product Price Validation workflow (WF002).",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF003",
+          "workflow_name": "Vendor File Processing",
+          "score": 0.715
+        },
+        {
+          "workflow_id": "WF004",
+          "workflow_name": "Product Description Generator",
+          "score": 0.355
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF002",
+      "workflow_name": "Product Price Validation",
+      "status": "success",
+      "summary": "8 products matched; 3 exceed the 10% threshold:\n- SKU-002 Mechanical Keyboard: internal 2500 vs vendor 2900 (+16.0%)\n- SKU-005 Steel Water Bottle: internal 900 vs vendor 1050 (+16.7%)\n- SKU-008 Canvas Tote Bag: internal 1200 vs vendor 1500 (+25.0%)\nNot validated -> internal only: SKU-009; vendor only: SKU-011; invalid prices: SKU-010",
+      "data": {
+        "rule": "flag when |vendor-internal|/internal > 10%",
+        "matched": 8,
+        "exception_count": 3,
+        "results": [
+          {
+            "sku": "SKU-001",
+            "product_name": "Wireless Mouse",
+            "internal_price": 1000,
+            "vendor_price": 1050.0,
+            "difference_percent": 5.0,
+            "exception": false
+          },
+          {
+            "sku": "SKU-002",
+            "product_name": "Mechanical Keyboard",
+            "internal_price": 2500,
+            "vendor_price": 2900.0,
+            "difference_percent": 16.0,
+            "exception": true
+          },
+          {
+            "sku": "SKU-003",
+            "product_name": "USB-C Hub",
+            "internal_price": 1500,
+            "vendor_price": 1650.0,
+            "difference_percent": 10.0,
+            "exception": false
+          },
+          {
+            "sku": "SKU-004",
+            "product_name": "Travel Backpack",
+            "internal_price": 3200,
+            "vendor_price": 3200.0,
+            "difference_percent": 0.0,
+            "exception": false
+          },
+          {
+            "sku": "SKU-005",
+            "product_name": "Steel Water Bottle",
+            "internal_price": 900,
+            "vendor_price": 1050.0,
+            "difference_percent": 16.67,
+            "exception": true
+          },
+          {
+            "sku": "SKU-006",
+            "product_name": "Laptop Stand",
+            "internal_price": 1800,
+            "vendor_price": 1700.0,
+            "difference_percent": -5.56,
+            "exception": false
+          },
+          {
+            "sku": "SKU-007",
+            "product_name": "Noise Cancelling Headphones",
+            "internal_price": 6500,
+            "vendor_price": 6000.0,
+            "difference_percent": -7.69,
+            "exception": false
+          },
+          {
+            "sku": "SKU-008",
+            "product_name": "Canvas Tote Bag",
+            "internal_price": 1200,
+            "vendor_price": 1500.0,
+            "difference_percent": 25.0,
+            "exception": true
+          }
+        ],
+        "unmatched": {
+          "internal_only": [
+            "SKU-009"
+          ],
+          "vendor_only": [
+            "SKU-011"
+          ],
+          "invalid_prices": [
+            "SKU-010"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Load product prices",
+          "status": "success",
+          "detail": "10 internal rows, 10 vendor rows",
+          "duration_ms": 7.37,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/products.csv"
+              },
+              "status": "success",
+              "summary": "table with 10 rows, 7 columns",
+              "duration_ms": 3.76,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/vendor_prices.csv"
+              },
+              "status": "success",
+              "summary": "table with 10 rows, 3 columns",
+              "duration_ms": 2.84,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 10x7>",
+                "required_columns": [
+                  "sku",
+                  "internal_price"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.39,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 10x3>",
+                "required_columns": [
+                  "sku",
+                  "vendor_price"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.26,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "match products by SKU",
+          "status": "success",
+          "detail": "9 matched, 1 internal-only, 1 vendor-only",
+          "duration_ms": 23.86,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "compare internal and vendor prices",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 4.32,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "calculate percentage difference",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.84,
+          "tool_calls": [
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "percentage_difference",
+                "base": "<series n=8>",
+                "other": "<series n=8>"
+              },
+              "status": "success",
+              "summary": "series of 8 values",
+              "duration_ms": 1.1,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "flag exceptions",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3.08,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "threshold_percent": 10,
+        "product_path": "data/mock/products.csv",
+        "vendor_path": "data/mock/vendor_prices.csv"
+      },
+      "defaults_used": [
+        "product_path",
+        "vendor_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 41.16,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 3,
+    "label": "Excel test question for WF003",
+    "expected_workflow": "WF003",
+    "selected_workflow": "WF003",
+    "routing_correct": true,
+    "request": "Process this vendor spreadsheet and show invalid rows.",
+    "selection": {
+      "workflow_id": "WF003",
+      "workflow_name": "Vendor File Processing",
+      "confidence": 0.98,
+      "reason": "User wants to process a vendor spreadsheet and see invalid rows, which matches the Vendor File Processing workflow (WF003).",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.322
+        },
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF003",
+      "workflow_name": "Vendor File Processing",
+      "status": "success",
+      "summary": "Processed 8 rows: 5 valid, 3 invalid. Cleaned dataset has 4 rows (1 exact duplicate row(s) removed).\nInvalid rows:\n- row 4: missing product_name\n- row 5: missing sku\n- row 7: missing sku; missing product_name\nCleaned file: outputs\\wf003_cleaned_vendor_file.csv; invalid-row report: outputs\\wf003_invalid_rows.csv",
+      "data": {
+        "rows_read": 8,
+        "valid_rows": 5,
+        "invalid_rows": 3,
+        "cleaned_rows": 4,
+        "exact_duplicates_removed": 1,
+        "conflicting_duplicate_skus": [],
+        "column_mapping": {
+          "item_code": "sku",
+          "title": "product_name",
+          "cat": "category",
+          "mat": "material",
+          "colour": "color",
+          "qty": "stock"
+        },
+        "invalid_row_report": [
+          {
+            "source_row": 4,
+            "sku": "V-003",
+            "product_name": null,
+            "category": "Accessories",
+            "material": "Plastic",
+            "color": "Red",
+            "stock": "12",
+            "reason": "missing product_name"
+          },
+          {
+            "source_row": 5,
+            "sku": null,
+            "product_name": "Desk Lamp",
+            "category": "Accessories",
+            "material": "Metal",
+            "color": "White",
+            "stock": "7",
+            "reason": "missing sku"
+          },
+          {
+            "source_row": 7,
+            "sku": null,
+            "product_name": null,
+            "category": "Misc",
+            "material": null,
+            "color": null,
+            "stock": "3",
+            "reason": "missing sku; missing product_name"
+          }
+        ],
+        "cleaned_preview": [
+          {
+            "sku": "V-001",
+            "product_name": "Travel Backpack",
+            "category": "Bags",
+            "material": "Nylon",
+            "color": "Black",
+            "stock": "20"
+          },
+          {
+            "sku": "V-002",
+            "product_name": "Water Bottle",
+            "category": "Accessories",
+            "material": "Steel",
+            "color": "Blue",
+            "stock": "0"
+          },
+          {
+            "sku": "V-005",
+            "product_name": "Yoga Mat",
+            "category": "Fitness",
+            "material": "Rubber",
+            "color": "Green",
+            "stock": "15"
+          },
+          {
+            "sku": "V-007",
+            "product_name": "Phone Stand",
+            "category": "Accessories",
+            "material": "Aluminum",
+            "color": "Silver",
+            "stock": "30"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Read file",
+          "status": "success",
+          "detail": "8 rows, columns: ['item_code', 'title', 'cat', 'mat', 'colour', 'qty']",
+          "duration_ms": 5.11,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/vendor_products.csv",
+                "normalize": "True"
+              },
+              "status": "success",
+              "summary": "table with 8 rows, 6 columns",
+              "duration_ms": 4.75,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "detect columns",
+          "status": "success",
+          "detail": "detected: item_code->sku, title->product_name, cat->category, mat->material, colour->color, qty->stock",
+          "duration_ms": 0.16,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "normalize column names",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 18.36,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "validate required fields",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 11.29,
+          "tool_calls": [
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 8x6>",
+                "required_columns": [
+                  "sku",
+                  "product_name"
+                ],
+                "non_empty": [
+                  "sku",
+                  "product_name"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 11.22,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "identify invalid rows",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 4.58,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "produce cleaned dataset",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 25.18,
+          "tool_calls": [
+            {
+              "tool": "reporting",
+              "args": {
+                "name": "wf003_cleaned_vendor_file",
+                "content": [
+                  {
+                    "sku": "V-001",
+                    "product_name": "Travel Backpack",
+                    "category": "Bags",
+                    "material": "Nylon",
+                    "color": "Black",
+                    "stock": "20"
+                  },
+                  {
+                    "sku": "V-002",
+                    "product_name": "Water Bottle",
+                    "category": "Accessories",
+                    "material": "Steel",
+                    "color": "Blue",
+                    "stock": "0"
+                  },
+                  {
+                    "sku": "V-005",
+                    "product_name": "Yoga Mat",
+                    "category": "Fitness",
+                    "material": "Rubber",
+                    "color": "Green",
+                    "stock": "15"
+                  },
+                  {
+                    "sku": "V-007",
+                    "product_name": "Phone Stand",
+                    "category": "Accessories",
+                    "material": "Aluminum",
+                    "color": "Silver",
+                    "stock": "30"
+                  }
+                ]
+              },
+              "status": "success",
+              "summary": "outputs\\wf003_cleaned_vendor_file.csv",
+              "duration_ms": 8.22,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "reporting",
+              "args": {
+                "name": "wf003_invalid_rows",
+                "content": [
+                  {
+                    "source_row": 4,
+                    "sku": "V-003",
+                    "product_name": NaN,
+                    "category": "Accessories",
+                    "material": "Plastic",
+                    "color": "Red",
+                    "stock": "12",
+                    "reason": "missing product_name"
+                  },
+                  {
+                    "source_row": 5,
+                    "sku": NaN,
+                    "product_name": "Desk Lamp",
+                    "category": "Accessories",
+                    "material": "Metal",
+                    "color": "White",
+                    "stock": "7",
+                    "reason": "missing sku"
+                  },
+                  {
+                    "source_row": 7,
+                    "sku": null,
+                    "product_name": null,
+                    "category": "Misc",
+                    "material": NaN,
+                    "color": NaN,
+                    "stock": "3",
+                    "reason": "missing sku; missing product_name"
+                  }
+                ]
+              },
+              "status": "success",
+              "summary": "outputs\\wf003_invalid_rows.csv",
+              "duration_ms": 7.75,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "vendor_path": "data/mock/vendor_products.csv"
+      },
+      "defaults_used": [
+        "vendor_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [
+        "outputs\\wf003_cleaned_vendor_file.csv",
+        "outputs\\wf003_invalid_rows.csv"
+      ],
+      "duration_ms": 74.3,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 4,
+    "label": "Excel test question for WF004",
+    "expected_workflow": "WF004",
+    "selected_workflow": "WF004",
+    "routing_correct": true,
+    "request": "Generate SEO content for this product.",
+    "selection": {
+      "workflow_id": "WF004",
+      "workflow_name": "Product Description Generator",
+      "confidence": 0.97,
+      "reason": "The request is to generate SEO content for a product, which aligns with the Product Description Generator workflow that creates product descriptions, short descriptions, SEO titles, and meta descriptions.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF008",
+          "workflow_name": "SEO Keyword Classification",
+          "score": 0.514
+        },
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.474
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF004",
+      "workflow_name": "Product Description Generator",
+      "status": "success",
+      "summary": "Product Description: The Travel Backpack in sleek black offers a 20L capacity, perfect for frequent travelers seeking reliable storage. Its design balances durability and style for journeys of any length. [Missing information, not assumed: material.]\nShort Description: Black 20L Travel Backpack for frequent travelers.\nSeo Title: Black Travel Backpack \u2013 20L for Frequent Travelers\nMeta Description: Explore the black Travel Backpack with 20L capacity, designed for frequent travelers who need dependable, stylish storage.\nMissing product information (explicitly not invented): material",
+      "data": {
+        "product_description": "The Travel Backpack in sleek black offers a 20L capacity, perfect for frequent travelers seeking reliable storage. Its design balances durability and style for journeys of any length. [Missing information, not assumed: material.]",
+        "short_description": "Black 20L Travel Backpack for frequent travelers.",
+        "seo_title": "Black Travel Backpack \u2013 20L for Frequent Travelers",
+        "meta_description": "Explore the black Travel Backpack with 20L capacity, designed for frequent travelers who need dependable, stylish storage.",
+        "missing_information": [
+          "material"
+        ],
+        "generated_by": "llm:openai/gpt-oss-120b",
+        "used_sample_product": true,
+        "facts_used": {
+          "product_name": "Travel Backpack",
+          "category": "Bags",
+          "color": "Black",
+          "target_audience": "frequent travelers",
+          "attributes": {
+            "capacity": "20L"
+          }
+        }
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate required attributes",
+          "status": "success",
+          "detail": "no product supplied -> using bundled sample product (data/mock/sample_product.json) | missing attributes: ['material']",
+          "duration_ms": 0.76,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "create product description",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1943.13,
+          "tool_calls": [
+            {
+              "tool": "llm",
+              "args": {
+                "task": "product_content",
+                "facts": "<dict keys=['product_name', 'category', 'color', 'target_audience', 'attributes']>",
+                "system": "You write e-commerce copy. Use ONLY the facts provided. Never invent or assume attributes, specs, materials, benefits...",
+                "prompt": "Write JSON with keys product_description (2-3 sentences), short_description (<=110 chars), seo_title (<=60 chars), me..."
+              },
+              "status": "success",
+              "summary": "dict(source, content)",
+              "duration_ms": 1943.02,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "generate short description",
+          "status": "success",
+          "detail": "short_description produced in the same structured LLM call",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "generate SEO title",
+          "status": "success",
+          "detail": "seo_title produced in the same structured LLM call",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "generate meta description",
+          "status": "success",
+          "detail": "text validation passed",
+          "duration_ms": 0.15,
+          "tool_calls": [
+            {
+              "tool": "text_validation",
+              "args": {
+                "fields": "<dict keys=['product_description', 'short_description', 'seo_title', 'meta_description']>",
+                "limits": {
+                  "short_description": 110,
+                  "seo_title": 60,
+                  "meta_description": 155
+                }
+              },
+              "status": "success",
+              "summary": "dict(ok, issues, fields)",
+              "duration_ms": 0.06,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        }
+      ],
+      "inputs": {},
+      "defaults_used": [],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 1944.26,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 5,
+    "label": "Excel test question for WF005",
+    "expected_workflow": "WF005",
+    "selected_workflow": "WF005",
+    "routing_correct": true,
+    "request": "Where is order ORD-1001?",
+    "selection": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "confidence": 0.99,
+      "reason": "User asks for the status of a specific order (ORD-1001), which matches the Customer Order Status workflow.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        },
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "status": "success",
+      "summary": "ORD-1001 (Wireless Mouse, USB-C Hub): order Shipped; shipment In Transit via BlueDart, tracking TRK1001, ETA 2026-10-09.",
+      "data": {
+        "orders": [
+          {
+            "order_id": "ORD-1001",
+            "items": [
+              "Wireless Mouse",
+              "USB-C Hub"
+            ],
+            "order_status": "Shipped",
+            "shipment": {
+              "order_id": "ORD-1001",
+              "carrier": "BlueDart",
+              "tracking_number": "TRK1001",
+              "shipment_status": "In Transit",
+              "estimated_delivery": "2026-10-09"
+            }
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate identifier",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "search order data",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 5.94,
+          "tool_calls": [
+            {
+              "tool": "order_api",
+              "args": {
+                "path": "data/mock/orders.csv",
+                "order_id": "ORD-1001"
+              },
+              "status": "success",
+              "summary": "1 items",
+              "duration_ms": 5.91,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "retrieve order status",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "retrieve shipment information",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 5.95,
+          "tool_calls": [
+            {
+              "tool": "shipment_lookup",
+              "args": {
+                "path": "data/mock/shipments.csv",
+                "order_id": "ORD-1001"
+              },
+              "status": "success",
+              "summary": "dict(order_id, carrier, tracking_number, shipment_status, estimated_delivery)",
+              "duration_ms": 5.92,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "summarize current status",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "order_id": "ORD-1001",
+        "orders_path": "data/mock/orders.csv",
+        "shipments_path": "data/mock/shipments.csv"
+      },
+      "defaults_used": [
+        "orders_path",
+        "shipments_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 12.06,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 6,
+    "label": "Excel test question for WF006",
+    "expected_workflow": "WF006",
+    "selected_workflow": "WF006",
+    "routing_correct": true,
+    "request": "Find likely duplicate products in the catalog.",
+    "selection": {
+      "workflow_id": "WF006",
+      "workflow_name": "Duplicate Product Detection",
+      "confidence": 0.99,
+      "reason": "The request is to find likely duplicate products in the catalog, which directly matches the purpose of WF006 (Duplicate Product Detection).",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.337
+        },
+        {
+          "workflow_id": "WF004",
+          "workflow_name": "Product Description Generator",
+          "score": 0.337
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF006",
+      "workflow_name": "Duplicate Product Detection",
+      "status": "success",
+      "summary": "3 duplicate group(s) found among 10 products:\n- [DEFINITE SKU match + possible matches, high confidence 1.00] P-1001 Wireless Mouse | p1001 Wireless Mouse (Black) | P-1002 Wireless Mouse (matched on: brand, category, color, material, name, sku)\n- [POSSIBLE, high confidence 1.00] P-1006 USB-C Hub 7-in-1 | P-1007 USB C Hub 7 in 1 (matched on: brand, category, color, material, name)\n- [POSSIBLE, high confidence 0.98] P-1003 Mechanical Keyboard | P-1004 Mechanical Keybord (matched on: brand, category, color, material, name)",
+      "data": {
+        "rules": "exact normalised SKU = definite; name similarity >= 0.85 and combined score >= 0.85 = possible",
+        "groups": [
+          {
+            "match_type": "mixed",
+            "confidence_level": "high",
+            "confidence_score": 1.0,
+            "matching_fields": [
+              "brand",
+              "category",
+              "color",
+              "material",
+              "name",
+              "sku"
+            ],
+            "products": [
+              {
+                "sku": "P-1001",
+                "name": "Wireless Mouse"
+              },
+              {
+                "sku": "p1001",
+                "name": "Wireless Mouse (Black)"
+              },
+              {
+                "sku": "P-1002",
+                "name": "Wireless Mouse"
+              }
+            ],
+            "pairs": [
+              {
+                "a": "P-1001",
+                "b": "p1001",
+                "match_type": "definite",
+                "confidence": 1.0,
+                "matching_fields": [
+                  "sku"
+                ]
+              },
+              {
+                "a": "P-1001",
+                "b": "P-1002",
+                "match_type": "possible",
+                "confidence": 1.0,
+                "matching_fields": [
+                  "name",
+                  "category",
+                  "brand",
+                  "color",
+                  "material"
+                ]
+              }
+            ]
+          },
+          {
+            "match_type": "possible",
+            "confidence_level": "high",
+            "confidence_score": 1.0,
+            "matching_fields": [
+              "brand",
+              "category",
+              "color",
+              "material",
+              "name"
+            ],
+            "products": [
+              {
+                "sku": "P-1006",
+                "name": "USB-C Hub 7-in-1"
+              },
+              {
+                "sku": "P-1007",
+                "name": "USB C Hub 7 in 1"
+              }
+            ],
+            "pairs": [
+              {
+                "a": "P-1006",
+                "b": "P-1007",
+                "match_type": "possible",
+                "confidence": 1.0,
+                "matching_fields": [
+                  "name",
+                  "category",
+                  "brand",
+                  "color",
+                  "material"
+                ]
+              }
+            ]
+          },
+          {
+            "match_type": "possible",
+            "confidence_level": "high",
+            "confidence_score": 0.984,
+            "matching_fields": [
+              "brand",
+              "category",
+              "color",
+              "material",
+              "name"
+            ],
+            "products": [
+              {
+                "sku": "P-1003",
+                "name": "Mechanical Keyboard"
+              },
+              {
+                "sku": "P-1004",
+                "name": "Mechanical Keybord"
+              }
+            ],
+            "pairs": [
+              {
+                "a": "P-1003",
+                "b": "P-1004",
+                "match_type": "possible",
+                "confidence": 0.984,
+                "matching_fields": [
+                  "name",
+                  "category",
+                  "brand",
+                  "color",
+                  "material"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Load products",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 4.45,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/catalog.csv"
+              },
+              "status": "success",
+              "summary": "table with 10 rows, 6 columns",
+              "duration_ms": 3.47,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 10x6>",
+                "required_columns": [
+                  "sku",
+                  "name"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.4,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "normalize names/SKUs",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.84,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "compare identifiers",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 6.45,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "compare product attributes",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 4.26,
+          "tool_calls": [
+            {
+              "tool": "pairwise_similarity",
+              "args": {
+                "names": "<list n=10>",
+                "min_score": "0.85"
+              },
+              "status": "success",
+              "summary": "5 items",
+              "duration_ms": 0.39,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "group likely duplicates",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.03,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "assign confidence",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.13,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "catalog_path": "data/mock/catalog.csv"
+      },
+      "defaults_used": [
+        "catalog_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 18.43,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 7,
+    "label": "Excel test question for WF007",
+    "expected_workflow": "WF007",
+    "selected_workflow": "WF007",
+    "routing_correct": true,
+    "request": "Create a campaign brief for the new collection.",
+    "selection": {
+      "workflow_id": "WF007",
+      "workflow_name": "Marketing Campaign Brief",
+      "confidence": 0.98,
+      "reason": "User explicitly requests a campaign brief for a new collection, matching the Marketing Campaign Brief workflow.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF004",
+          "workflow_name": "Product Description Generator",
+          "score": 0.203
+        },
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF007",
+      "workflow_name": "Marketing Campaign Brief",
+      "status": "needs_input",
+      "summary": "What is the campaign goal (e.g. 'launch the new collection')? What are the campaign dates (e.g. 'Oct 10 to Oct 20')?",
+      "data": {},
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate inputs",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "identify campaign objective",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "summarize products",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "create messaging",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "create channel recommendations",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "create campaign checklist",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "products_path": "data/mock/products.csv"
+      },
+      "defaults_used": [
+        "products_path"
+      ],
+      "question": "What is the campaign goal (e.g. 'launch the new collection')? What are the campaign dates (e.g. 'Oct 10 to Oct 20')?",
+      "missing": [
+        "goal",
+        "dates"
+      ],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 0.1,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 8,
+    "label": "Excel test question for WF008",
+    "expected_workflow": "WF008",
+    "selected_workflow": "WF008",
+    "routing_correct": true,
+    "request": "Classify these keywords and map them to pages.",
+    "selection": {
+      "workflow_id": "WF008",
+      "workflow_name": "SEO Keyword Classification",
+      "confidence": 0.95,
+      "reason": "User wants keyword classification and page mapping, which matches the SEO Keyword Classification workflow.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        },
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF008",
+      "workflow_name": "SEO Keyword Classification",
+      "status": "success",
+      "summary": "19 unique keywords classified (1 duplicates removed). Intent mix: {'commercial': 7, 'informational': 6, 'transactional': 4, 'navigational': 2}. 10 high priority:\n- best mechanical keyboard 2026 [commercial] -> Category page -> /collections/electronics\n- best travel backpack for carry on [commercial] -> Category page -> /collections/bags\n- buy wireless mouse online [transactional] -> Category / product page -> /collections/electronics\n- canvas tote bag buy [transactional] -> Category / product page -> /collections/bags\n- cheap laptop stand deals [transactional] -> Category / product page -> /collections/electronics\n- laptop stand near me [transactional] -> Category / product page -> /collections/electronics\n- travel backpack [commercial] -> Category page -> /collections/bags\n- usb-c hub price [commercial] -> Category page -> /collections/electronics\n- webcam hd [commercial] -> Category page -> /collections/electronics\n- wireless mouse [commercial] -> Category page -> /collections/electronics\nFull report: outputs\\wf008_keyword_report.csv",
+      "data": {
+        "unique_keywords": 19,
+        "duplicates_removed": 1,
+        "intent_counts": {
+          "commercial": 7,
+          "informational": 6,
+          "transactional": 4,
+          "navigational": 2
+        },
+        "classified_by": "llm:openai/gpt-oss-120b",
+        "keywords": [
+          {
+            "keyword": "best mechanical keyboard 2026",
+            "intent": "commercial",
+            "category": "Electronics",
+            "priority": "high",
+            "recommended_target_page": "Category page -> /collections/electronics"
+          },
+          {
+            "keyword": "best travel backpack for carry on",
+            "intent": "commercial",
+            "category": "Bags",
+            "priority": "high",
+            "recommended_target_page": "Category page -> /collections/bags"
+          },
+          {
+            "keyword": "buy wireless mouse online",
+            "intent": "transactional",
+            "category": "Electronics",
+            "priority": "high",
+            "recommended_target_page": "Category / product page -> /collections/electronics"
+          },
+          {
+            "keyword": "canvas tote bag buy",
+            "intent": "transactional",
+            "category": "Bags",
+            "priority": "high",
+            "recommended_target_page": "Category / product page -> /collections/bags"
+          },
+          {
+            "keyword": "cheap laptop stand deals",
+            "intent": "transactional",
+            "category": "Electronics",
+            "priority": "high",
+            "recommended_target_page": "Category / product page -> /collections/electronics"
+          },
+          {
+            "keyword": "laptop stand near me",
+            "intent": "transactional",
+            "category": "Electronics",
+            "priority": "high",
+            "recommended_target_page": "Category / product page -> /collections/electronics"
+          },
+          {
+            "keyword": "travel backpack",
+            "intent": "commercial",
+            "category": "Bags",
+            "priority": "high",
+            "recommended_target_page": "Category page -> /collections/bags"
+          },
+          {
+            "keyword": "usb-c hub price",
+            "intent": "commercial",
+            "category": "Electronics",
+            "priority": "high",
+            "recommended_target_page": "Category page -> /collections/electronics"
+          },
+          {
+            "keyword": "webcam hd",
+            "intent": "commercial",
+            "category": "Electronics",
+            "priority": "high",
+            "recommended_target_page": "Category page -> /collections/electronics"
+          },
+          {
+            "keyword": "wireless mouse",
+            "intent": "commercial",
+            "category": "Electronics",
+            "priority": "high",
+            "recommended_target_page": "Category page -> /collections/electronics"
+          },
+          {
+            "keyword": "desk organizer ideas",
+            "intent": "informational",
+            "category": "Accessories",
+            "priority": "medium",
+            "recommended_target_page": "Blog / guide page -> /collections/accessories"
+          },
+          {
+            "keyword": "how to clean a mechanical keyboard",
+            "intent": "informational",
+            "category": "Electronics",
+            "priority": "medium",
+            "recommended_target_page": "Blog / guide page -> /collections/electronics"
+          },
+          {
+            "keyword": "how to remove odor from water bottle",
+            "intent": "informational",
+            "category": "Accessories",
+            "priority": "medium",
+            "recommended_target_page": "Blog / guide page -> /collections/accessories"
+          },
+          {
+            "keyword": "steel water bottle review",
+            "intent": "informational",
+            "category": "Accessories",
+            "priority": "medium",
+            "recommended_target_page": "Blog / guide page -> /collections/accessories"
+          },
+          {
+            "keyword": "usb c hub vs docking station",
+            "intent": "informational",
+            "category": "Electronics",
+            "priority": "medium",
+            "recommended_target_page": "Blog / guide page -> /collections/electronics"
+          },
+          {
+            "keyword": "what size backpack for flights",
+            "intent": "informational",
+            "category": "Bags",
+            "priority": "medium",
+            "recommended_target_page": "Blog / guide page -> /collections/bags"
+          },
+          {
+            "keyword": "yoga mat",
+            "intent": "commercial",
+            "category": "Unmapped",
+            "priority": "medium",
+            "recommended_target_page": "Unmapped - needs manual review"
+          },
+          {
+            "keyword": "techstore login",
+            "intent": "navigational",
+            "category": "Unmapped",
+            "priority": "low",
+            "recommended_target_page": "Home or account page"
+          },
+          {
+            "keyword": "techstore official website",
+            "intent": "navigational",
+            "category": "Unmapped",
+            "priority": "low",
+            "recommended_target_page": "Home or account page"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Read keywords",
+          "status": "success",
+          "detail": "20 keywords read from column 'keyword'",
+          "duration_ms": 9.48,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/keywords.csv"
+              },
+              "status": "success",
+              "summary": "table with 20 rows, 1 columns",
+              "duration_ms": 2.86,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 20x1>",
+                "required_columns": [
+                  "keyword"
+                ],
+                "non_empty": [
+                  "keyword"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 2.22,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/categories.csv"
+              },
+              "status": "success",
+              "summary": "table with 3 rows, 3 columns",
+              "duration_ms": 4.16,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "remove duplicates",
+          "status": "success",
+          "detail": "1 duplicate keyword(s) removed",
+          "duration_ms": 6.35,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "classify search intent",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 2851.81,
+          "tool_calls": [
+            {
+              "tool": "llm",
+              "args": {
+                "task": "keyword_intent",
+                "facts": "<dict keys=['keywords']>",
+                "system": "You classify SEO keywords by search intent: informational, commercial, transactional or navigational. Return JSON {\"c...",
+                "prompt": "Classify each keyword:\n[\"wireless mouse\", \"buy wireless mouse online\", \"best mechanical keyboard 2026\", \"how to clean..."
+              },
+              "status": "success",
+              "summary": "dict(source, content)",
+              "duration_ms": 2851.7,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "name": "map keywords to categories",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.5,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "identify high-priority keywords",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.05,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "export results",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3.97,
+          "tool_calls": [
+            {
+              "tool": "reporting",
+              "args": {
+                "name": "wf008_keyword_report",
+                "content": "<list n=19>"
+              },
+              "status": "success",
+              "summary": "outputs\\wf008_keyword_report.csv",
+              "duration_ms": 3.94,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "keywords_path": "data/mock/keywords.csv",
+        "categories_path": "data/mock/categories.csv"
+      },
+      "defaults_used": [
+        "keywords_path",
+        "categories_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [
+        "outputs\\wf008_keyword_report.csv"
+      ],
+      "duration_ms": 2875.62,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 9,
+    "label": "Excel test question for WF009",
+    "expected_workflow": "WF009",
+    "selected_workflow": "WF009",
+    "routing_correct": true,
+    "request": "Assign this urgent task to the best available developer.",
+    "selection": {
+      "workflow_id": "WF009",
+      "workflow_name": "Employee Task Assignment",
+      "confidence": 0.98,
+      "reason": "The request is to assign an urgent task to the best available developer, which aligns with the Employee Task Assignment workflow (WF009) that handles task assignment based on description, skills, workload, and priority.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF005",
+          "workflow_name": "Customer Order Status",
+          "score": 0.216
+        },
+        {
+          "workflow_id": "WF006",
+          "workflow_name": "Duplicate Product Detection",
+          "score": 0.216
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF009",
+      "workflow_name": "Employee Task Assignment",
+      "status": "needs_input",
+      "summary": "What is the task? Please describe it (and optionally the skills needed).",
+      "data": {},
+      "steps": [
+        {
+          "index": 0,
+          "name": "Understand task requirements",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "compare employee skills",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "check current workload",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "rank candidates",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "select employee",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "generate assignment summary",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "priority": "urgent",
+        "role_filter": "developer",
+        "employees_path": "data/mock/employees.csv"
+      },
+      "defaults_used": [
+        "employees_path"
+      ],
+      "question": "What is the task? Please describe it (and optionally the skills needed).",
+      "missing": [
+        "task_description"
+      ],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 0.06,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 10,
+    "label": "Excel test question for WF010",
+    "expected_workflow": "WF010",
+    "selected_workflow": "WF010",
+    "routing_correct": true,
+    "request": "Which workflows are failing most often?",
+    "selection": {
+      "workflow_id": "WF010",
+      "workflow_name": "Workflow Performance Report",
+      "confidence": 0.95,
+      "reason": "The request asks for information on failing workflows, which matches WF010 that generates a performance report with metrics and problem areas.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        },
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF010",
+      "workflow_name": "Workflow Performance Report",
+      "status": "success",
+      "summary": "4 of 10 workflows flagged (failure rate > 10% or avg time > 8s).\n- WF002: 50.0% failures (6/12), avg 1.64s  FLAGGED (failure rate 50.0% > 10%)\n- WF004: 16.67% failures (2/12), avg 7.67s  FLAGGED (failure rate 16.67% > 10%)\n- WF003: 16.67% failures (2/12), avg 1.41s  FLAGGED (failure rate 16.67% > 10%)\n- WF005: 0.0% failures (0/12), avg 9.27s  FLAGGED (avg time 9.27s > 8s)\n- WF007: 0.0% failures (0/12), avg 6.33s\n- WF006: 0.0% failures (0/12), avg 2.58s\n- WF008: 0.0% failures (0/12), avg 1.77s\n- WF001: 0.0% failures (0/12), avg 1.15s\n- WF009: 0.0% failures (0/12), avg 0.99s\n- WF010: 0.0% failures (0/4), avg 0.92s\nTop errors: Invalid price format x4; LLM timeout x2; Missing required column: sku x2\nSlow steps: WF005.shipment_lookup 6.6s; WF004.llm_generate 5.44s; WF007.llm_messaging 4.34s\nRecommendations:\n  * Add automated validation for price fields to eliminate \"Invalid price format\" errors and reduce WF002 failures\n  * Implement pre\u2011run checks for required columns (e.g., sku) and vendor file presence to stop \"Missing required column\" and \"Vendor price file missing\" errors\n  * Increase LLM request timeout or add retry/back\u2011off logic to mitigate \"LLM timeout\" failures in WF004 and WF007\n  * Reduce WF002 failure rate by adding idempotent retry logic and detailed error logging for the failing steps\n  * Investigate and refactor the \"shipment_lookup\" step in WF005 to lower its average time (6.6\u202fs) and bring total workflow time under the 8\u202fs threshold\n  * Optimize the \"llm_generate\" step in WF004 (5.44\u202fs) by caching prompts or using a smaller model to improve overall latency\n  * Set up monitoring alerts for any workflow whose failure_rate exceeds 10\u202f% or avg_execution_time exceeds 8\u202fs\n  * Create a post\u2011run report that aggregates frequent error types and triggers targeted remediation tickets\nReport: outputs\\wf010_performance_report.json",
+      "data": {
+        "thresholds": {
+          "failure_rate_percent": 10.0,
+          "avg_time_seconds": 8.0
+        },
+        "workflows": [
+          {
+            "workflow_id": "WF002",
+            "runs": 12,
+            "failures": 6,
+            "failure_rate": 50.0,
+            "success_rate": 50.0,
+            "avg_execution_time": 1.64,
+            "flagged": true,
+            "flag_reasons": [
+              "failure rate 50.0% > 10%"
+            ]
+          },
+          {
+            "workflow_id": "WF004",
+            "runs": 12,
+            "failures": 2,
+            "failure_rate": 16.67,
+            "success_rate": 83.33,
+            "avg_execution_time": 7.67,
+            "flagged": true,
+            "flag_reasons": [
+              "failure rate 16.67% > 10%"
+            ]
+          },
+          {
+            "workflow_id": "WF003",
+            "runs": 12,
+            "failures": 2,
+            "failure_rate": 16.67,
+            "success_rate": 83.33,
+            "avg_execution_time": 1.41,
+            "flagged": true,
+            "flag_reasons": [
+              "failure rate 16.67% > 10%"
+            ]
+          },
+          {
+            "workflow_id": "WF005",
+            "runs": 12,
+            "failures": 0,
+            "failure_rate": 0.0,
+            "success_rate": 100.0,
+            "avg_execution_time": 9.27,
+            "flagged": true,
+            "flag_reasons": [
+              "avg time 9.27s > 8s"
+            ]
+          },
+          {
+            "workflow_id": "WF007",
+            "runs": 12,
+            "failures": 0,
+            "failure_rate": 0.0,
+            "success_rate": 100.0,
+            "avg_execution_time": 6.33,
+            "flagged": false,
+            "flag_reasons": []
+          },
+          {
+            "workflow_id": "WF006",
+            "runs": 12,
+            "failures": 0,
+            "failure_rate": 0.0,
+            "success_rate": 100.0,
+            "avg_execution_time": 2.58,
+            "flagged": false,
+            "flag_reasons": []
+          },
+          {
+            "workflow_id": "WF008",
+            "runs": 12,
+            "failures": 0,
+            "failure_rate": 0.0,
+            "success_rate": 100.0,
+            "avg_execution_time": 1.77,
+            "flagged": false,
+            "flag_reasons": []
+          },
+          {
+            "workflow_id": "WF001",
+            "runs": 12,
+            "failures": 0,
+            "failure_rate": 0.0,
+            "success_rate": 100.0,
+            "avg_execution_time": 1.15,
+            "flagged": false,
+            "flag_reasons": []
+          },
+          {
+            "workflow_id": "WF009",
+            "runs": 12,
+            "failures": 0,
+            "failure_rate": 0.0,
+            "success_rate": 100.0,
+            "avg_execution_time": 0.99,
+            "flagged": false,
+            "flag_reasons": []
+          },
+          {
+            "workflow_id": "WF010",
+            "runs": 4,
+            "failures": 0,
+            "failure_rate": 0.0,
+            "success_rate": 100.0,
+            "avg_execution_time": 0.92,
+            "flagged": false,
+            "flag_reasons": []
+          }
+        ],
+        "frequent_errors": [
+          {
+            "error": "Invalid price format",
+            "count": 4,
+            "workflows": [
+              "WF002"
+            ]
+          },
+          {
+            "error": "LLM timeout",
+            "count": 2,
+            "workflows": [
+              "WF004"
+            ]
+          },
+          {
+            "error": "Missing required column: sku",
+            "count": 2,
+            "workflows": [
+              "WF003"
+            ]
+          },
+          {
+            "error": "Vendor price file missing",
+            "count": 2,
+            "workflows": [
+              "WF002"
+            ]
+          }
+        ],
+        "slow_steps": [
+          {
+            "workflow_id": "WF005",
+            "step": "shipment_lookup",
+            "avg_seconds": 6.6
+          },
+          {
+            "workflow_id": "WF004",
+            "step": "llm_generate",
+            "avg_seconds": 5.44
+          },
+          {
+            "workflow_id": "WF007",
+            "step": "llm_messaging",
+            "avg_seconds": 4.34
+          }
+        ],
+        "recommendations": [
+          "Add automated validation for price fields to eliminate \"Invalid price format\" errors and reduce WF002 failures",
+          "Implement pre\u2011run checks for required columns (e.g., sku) and vendor file presence to stop \"Missing required column\" and \"Vendor price file missing\" errors",
+          "Increase LLM request timeout or add retry/back\u2011off logic to mitigate \"LLM timeout\" failures in WF004 and WF007",
+          "Reduce WF002 failure rate by adding idempotent retry logic and detailed error logging for the failing steps",
+          "Investigate and refactor the \"shipment_lookup\" step in WF005 to lower its average time (6.6\u202fs) and bring total workflow time under the 8\u202fs threshold",
+          "Optimize the \"llm_generate\" step in WF004 (5.44\u202fs) by caching prompts or using a smaller model to improve overall latency",
+          "Set up monitoring alerts for any workflow whose failure_rate exceeds 10\u202f% or avg_execution_time exceeds 8\u202fs",
+          "Create a post\u2011run report that aggregates frequent error types and triggers targeted remediation tickets"
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Load execution logs",
+          "status": "success",
+          "detail": "327 log rows, 112 runs",
+          "duration_ms": 7.98,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/execution_logs.csv"
+              },
+              "status": "success",
+              "summary": "table with 327 rows, 7 columns",
+              "duration_ms": 5.39,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 327x7>",
+                "required_columns": [
+                  "workflow_id",
+                  "status",
+                  "execution_time_seconds"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.51,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "calculate success/failure rate",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 60.67,
+          "tool_calls": [
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "6",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "50.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "6",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "50.0",
+              "duration_ms": 0.0,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "2",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "16.666666666666664",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "2",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "16.666666666666664",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "2",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "16.666666666666664",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "2",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "16.666666666666664",
+              "duration_ms": 0.0,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.0,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.0,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.0,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.0,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "12"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.0,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "4"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "rate",
+                "count": "0",
+                "total": "4"
+              },
+              "status": "success",
+              "summary": "0.0",
+              "duration_ms": 0.0,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "calculate average execution time",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3.94,
+          "tool_calls": [
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "1.1541666666666668",
+              "duration_ms": 0.29,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "1.6433333333333335",
+              "duration_ms": 0.15,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "1.4058333333333335",
+              "duration_ms": 0.12,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "7.665",
+              "duration_ms": 0.11,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "9.265",
+              "duration_ms": 0.11,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "2.575",
+              "duration_ms": 0.11,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "6.326666666666668",
+              "duration_ms": 0.11,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "1.7675",
+              "duration_ms": 0.13,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=12>"
+              },
+              "status": "success",
+              "summary": "0.9908333333333332",
+              "duration_ms": 0.11,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "mean",
+                "values": "<series n=4>"
+              },
+              "status": "success",
+              "summary": "0.9175",
+              "duration_ms": 0.11,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "name": "identify frequent errors",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 17.75,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "identify slow steps",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 16.62,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "generate recommendations",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3774.17,
+          "tool_calls": [
+            {
+              "tool": "llm",
+              "args": {
+                "task": "recommendations",
+                "facts": "<dict keys=['flagged', 'frequent_errors', 'slow_steps', 'failure_threshold', 'time_threshold']>",
+                "system": "You are an SRE. Give concise, specific, actionable recommendations based only on the data.",
+                "prompt": "Return JSON {\"recommendations\": [strings]} for this workflow-performance data:\n{\"flagged\": [{\"workflow_id\": \"WF002\", ..."
+              },
+              "status": "success",
+              "summary": "dict(source, content)",
+              "duration_ms": 3772.51,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "reporting",
+              "args": {
+                "name": "wf010_performance_report",
+                "content": "<dict keys=['workflows', 'frequent_errors', 'slow_steps', 'recommendations']>",
+                "fmt": "json"
+              },
+              "status": "success",
+              "summary": "outputs\\wf010_performance_report.json",
+              "duration_ms": 1.25,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "logs_path": "data/mock/execution_logs.csv",
+        "failure_threshold_percent": 10,
+        "time_threshold_seconds": 8,
+        "slow_step_seconds": 3
+      },
+      "defaults_used": [
+        "logs_path",
+        "failure_threshold_percent",
+        "time_threshold_seconds",
+        "slow_step_seconds"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [
+        "outputs\\wf010_performance_report.json"
+      ],
+      "duration_ms": 3881.56,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 11,
+    "label": "WF001 with a custom threshold",
+    "expected_workflow": "WF001",
+    "selected_workflow": "WF001",
+    "routing_correct": true,
+    "request": "Which products are below a minimum stock threshold of 12?",
+    "selection": {
+      "workflow_id": "WF001",
+      "workflow_name": "Inventory Restock Check",
+      "confidence": 0.98,
+      "reason": "User asks for products below a minimum stock threshold, which matches the Inventory Restock Check workflow.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.337
+        },
+        {
+          "workflow_id": "WF004",
+          "workflow_name": "Product Description Generator",
+          "score": 0.337
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF001",
+      "workflow_name": "Inventory Restock Check",
+      "status": "success",
+      "summary": "6 of 9 products need restocking:\n- SKU-006 Laptop Stand: stock 0 < min 12 -> reorder 24\n- SKU-003 USB-C Hub: stock 2 < min 12 -> reorder 22\n- SKU-008 Canvas Tote Bag: stock 3 < min 12 -> reorder 21\n- SKU-001 Wireless Mouse: stock 4 < min 12 -> reorder 20\n- SKU-007 Noise Cancelling Headphones: stock 7 < min 12 -> reorder 17\n- SKU-005 Steel Water Bottle: stock 10 < min 12 -> reorder 14\n1 row(s) skipped due to invalid stock data: SKU-010",
+      "data": {
+        "rule": "restock if current_stock < minimum_stock",
+        "reorder_rule": "restock up to 2 x minimum stock",
+        "products_checked": 9,
+        "restock_count": 6,
+        "items": [
+          {
+            "sku": "SKU-006",
+            "product_name": "Laptop Stand",
+            "current_stock": 0,
+            "minimum_stock": 12,
+            "reorder_quantity": 24
+          },
+          {
+            "sku": "SKU-003",
+            "product_name": "USB-C Hub",
+            "current_stock": 2,
+            "minimum_stock": 12,
+            "reorder_quantity": 22
+          },
+          {
+            "sku": "SKU-008",
+            "product_name": "Canvas Tote Bag",
+            "current_stock": 3,
+            "minimum_stock": 12,
+            "reorder_quantity": 21
+          },
+          {
+            "sku": "SKU-001",
+            "product_name": "Wireless Mouse",
+            "current_stock": 4,
+            "minimum_stock": 12,
+            "reorder_quantity": 20
+          },
+          {
+            "sku": "SKU-007",
+            "product_name": "Noise Cancelling Headphones",
+            "current_stock": 7,
+            "minimum_stock": 12,
+            "reorder_quantity": 17
+          },
+          {
+            "sku": "SKU-005",
+            "product_name": "Steel Water Bottle",
+            "current_stock": 10,
+            "minimum_stock": 12,
+            "reorder_quantity": 14
+          }
+        ],
+        "skipped_rows": [
+          {
+            "sku": "SKU-010",
+            "reason": "non-numeric stock values (nan/12.0)"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Load inventory",
+          "status": "success",
+          "detail": "10 inventory rows loaded",
+          "duration_ms": 17.22,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/inventory.csv"
+              },
+              "status": "success",
+              "summary": "table with 10 rows, 4 columns",
+              "duration_ms": 16.7,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 10x4>",
+                "required_columns": [
+                  "sku",
+                  "product_name",
+                  "current_stock",
+                  "minimum_stock"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.44,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "compare current stock with minimum threshold",
+          "status": "success",
+          "detail": "threshold overridden to 12 | 1 rows skipped (non-numeric stock)",
+          "duration_ms": 2.44,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "identify low-stock products",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.21,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "calculate reorder quantity",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 2.04,
+          "tool_calls": [
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "reorder_quantity",
+                "current": "<series n=6>",
+                "minimum": "<series n=6>",
+                "multiplier": "2.0"
+              },
+              "status": "success",
+              "summary": "series of 6 values",
+              "duration_ms": 1.29,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "generate restock list",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3.96,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "minimum_stock": 12,
+        "inventory_path": "data/mock/inventory.csv",
+        "reorder_multiplier": 2
+      },
+      "defaults_used": [
+        "inventory_path",
+        "reorder_multiplier"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 27.14,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 12,
+    "label": "WF002 with a custom 15% threshold",
+    "expected_workflow": "WF002",
+    "selected_workflow": "WF002",
+    "routing_correct": true,
+    "request": "Validate vendor prices and flag anything that differs by more than 15%.",
+    "selection": {
+      "workflow_id": "WF002",
+      "workflow_name": "Product Price Validation",
+      "confidence": 0.98,
+      "reason": "User wants to validate vendor prices and flag differences, which matches the Product Price Validation workflow (WF002) that compares product and vendor price lists and reports discrepancies.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF003",
+          "workflow_name": "Vendor File Processing",
+          "score": 0.656
+        },
+        {
+          "workflow_id": "WF010",
+          "workflow_name": "Workflow Performance Report",
+          "score": 0.178
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF002",
+      "workflow_name": "Product Price Validation",
+      "status": "success",
+      "summary": "8 products matched; 3 exceed the 15% threshold:\n- SKU-002 Mechanical Keyboard: internal 2500 vs vendor 2900 (+16.0%)\n- SKU-005 Steel Water Bottle: internal 900 vs vendor 1050 (+16.7%)\n- SKU-008 Canvas Tote Bag: internal 1200 vs vendor 1500 (+25.0%)\nNot validated -> internal only: SKU-009; vendor only: SKU-011; invalid prices: SKU-010",
+      "data": {
+        "rule": "flag when |vendor-internal|/internal > 15%",
+        "matched": 8,
+        "exception_count": 3,
+        "results": [
+          {
+            "sku": "SKU-001",
+            "product_name": "Wireless Mouse",
+            "internal_price": 1000,
+            "vendor_price": 1050.0,
+            "difference_percent": 5.0,
+            "exception": false
+          },
+          {
+            "sku": "SKU-002",
+            "product_name": "Mechanical Keyboard",
+            "internal_price": 2500,
+            "vendor_price": 2900.0,
+            "difference_percent": 16.0,
+            "exception": true
+          },
+          {
+            "sku": "SKU-003",
+            "product_name": "USB-C Hub",
+            "internal_price": 1500,
+            "vendor_price": 1650.0,
+            "difference_percent": 10.0,
+            "exception": false
+          },
+          {
+            "sku": "SKU-004",
+            "product_name": "Travel Backpack",
+            "internal_price": 3200,
+            "vendor_price": 3200.0,
+            "difference_percent": 0.0,
+            "exception": false
+          },
+          {
+            "sku": "SKU-005",
+            "product_name": "Steel Water Bottle",
+            "internal_price": 900,
+            "vendor_price": 1050.0,
+            "difference_percent": 16.67,
+            "exception": true
+          },
+          {
+            "sku": "SKU-006",
+            "product_name": "Laptop Stand",
+            "internal_price": 1800,
+            "vendor_price": 1700.0,
+            "difference_percent": -5.56,
+            "exception": false
+          },
+          {
+            "sku": "SKU-007",
+            "product_name": "Noise Cancelling Headphones",
+            "internal_price": 6500,
+            "vendor_price": 6000.0,
+            "difference_percent": -7.69,
+            "exception": false
+          },
+          {
+            "sku": "SKU-008",
+            "product_name": "Canvas Tote Bag",
+            "internal_price": 1200,
+            "vendor_price": 1500.0,
+            "difference_percent": 25.0,
+            "exception": true
+          }
+        ],
+        "unmatched": {
+          "internal_only": [
+            "SKU-009"
+          ],
+          "vendor_only": [
+            "SKU-011"
+          ],
+          "invalid_prices": [
+            "SKU-010"
+          ]
+        }
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Load product prices",
+          "status": "success",
+          "detail": "10 internal rows, 10 vendor rows",
+          "duration_ms": 31.33,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/products.csv"
+              },
+              "status": "success",
+              "summary": "table with 10 rows, 7 columns",
+              "duration_ms": 15.33,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/vendor_prices.csv"
+              },
+              "status": "success",
+              "summary": "table with 10 rows, 3 columns",
+              "duration_ms": 15.27,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 10x7>",
+                "required_columns": [
+                  "sku",
+                  "internal_price"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.37,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 10x3>",
+                "required_columns": [
+                  "sku",
+                  "vendor_price"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.26,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "match products by SKU",
+          "status": "success",
+          "detail": "9 matched, 1 internal-only, 1 vendor-only",
+          "duration_ms": 22.86,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "compare internal and vendor prices",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 4.35,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "calculate percentage difference",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.57,
+          "tool_calls": [
+            {
+              "tool": "calculator",
+              "args": {
+                "op": "percentage_difference",
+                "base": "<series n=8>",
+                "other": "<series n=8>"
+              },
+              "status": "success",
+              "summary": "series of 8 values",
+              "duration_ms": 0.91,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "flag exceptions",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3.16,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "threshold_percent": 15,
+        "product_path": "data/mock/products.csv",
+        "vendor_path": "data/mock/vendor_prices.csv"
+      },
+      "defaults_used": [
+        "product_path",
+        "vendor_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 64.08,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 13,
+    "label": "WF003 on an XLSX vendor file",
+    "expected_workflow": "WF003",
+    "selected_workflow": "WF003",
+    "routing_correct": true,
+    "request": "Process this vendor spreadsheet data/mock/vendor_products.xlsx and show invalid rows.",
+    "selection": {
+      "workflow_id": "WF003",
+      "workflow_name": "Vendor File Processing",
+      "confidence": 0.98,
+      "reason": "User wants to process a vendor spreadsheet and see invalid rows, which matches the Vendor File Processing workflow.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.502
+        },
+        {
+          "workflow_id": "WF004",
+          "workflow_name": "Product Description Generator",
+          "score": 0.19
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF003",
+      "workflow_name": "Vendor File Processing",
+      "status": "success",
+      "summary": "Processed 8 rows: 5 valid, 3 invalid. Cleaned dataset has 4 rows (1 exact duplicate row(s) removed).\nInvalid rows:\n- row 4: missing product_name\n- row 5: missing sku\n- row 7: missing sku; missing product_name\nCleaned file: outputs\\wf003_cleaned_vendor_file.csv; invalid-row report: outputs\\wf003_invalid_rows.csv",
+      "data": {
+        "rows_read": 8,
+        "valid_rows": 5,
+        "invalid_rows": 3,
+        "cleaned_rows": 4,
+        "exact_duplicates_removed": 1,
+        "conflicting_duplicate_skus": [],
+        "column_mapping": {
+          "item_code": "sku",
+          "title": "product_name",
+          "cat": "category",
+          "mat": "material",
+          "colour": "color",
+          "qty": "stock"
+        },
+        "invalid_row_report": [
+          {
+            "source_row": 4,
+            "sku": "V-003",
+            "product_name": null,
+            "category": "Accessories",
+            "material": "Plastic",
+            "color": "Red",
+            "stock": "12",
+            "reason": "missing product_name"
+          },
+          {
+            "source_row": 5,
+            "sku": null,
+            "product_name": "Desk Lamp",
+            "category": "Accessories",
+            "material": "Metal",
+            "color": "White",
+            "stock": "7",
+            "reason": "missing sku"
+          },
+          {
+            "source_row": 7,
+            "sku": null,
+            "product_name": null,
+            "category": "Misc",
+            "material": null,
+            "color": null,
+            "stock": "3",
+            "reason": "missing sku; missing product_name"
+          }
+        ],
+        "cleaned_preview": [
+          {
+            "sku": "V-001",
+            "product_name": "Travel Backpack",
+            "category": "Bags",
+            "material": "Nylon",
+            "color": "Black",
+            "stock": "20"
+          },
+          {
+            "sku": "V-002",
+            "product_name": "Water Bottle",
+            "category": "Accessories",
+            "material": "Steel",
+            "color": "Blue",
+            "stock": "0"
+          },
+          {
+            "sku": "V-005",
+            "product_name": "Yoga Mat",
+            "category": "Fitness",
+            "material": "Rubber",
+            "color": "Green",
+            "stock": "15"
+          },
+          {
+            "sku": "V-007",
+            "product_name": "Phone Stand",
+            "category": "Accessories",
+            "material": "Aluminum",
+            "color": "Silver",
+            "stock": "30"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Read file",
+          "status": "success",
+          "detail": "8 rows, columns: ['item_code', 'title', 'cat', 'mat', 'colour', 'qty']",
+          "duration_ms": 28.07,
+          "tool_calls": [
+            {
+              "tool": "excel_parser",
+              "args": {
+                "path": "data/mock/vendor_products.xlsx",
+                "normalize": "True"
+              },
+              "status": "success",
+              "summary": "table with 8 rows, 6 columns",
+              "duration_ms": 27.99,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "detect columns",
+          "status": "success",
+          "detail": "detected: item_code->sku, title->product_name, cat->category, mat->material, colour->color, qty->stock",
+          "duration_ms": 0.13,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "normalize column names",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 10.61,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "validate required fields",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 4.58,
+          "tool_calls": [
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 8x6>",
+                "required_columns": [
+                  "sku",
+                  "product_name"
+                ],
+                "non_empty": [
+                  "sku",
+                  "product_name"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 4.52,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "identify invalid rows",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 4.2,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "produce cleaned dataset",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 16.53,
+          "tool_calls": [
+            {
+              "tool": "reporting",
+              "args": {
+                "name": "wf003_cleaned_vendor_file",
+                "content": [
+                  {
+                    "sku": "V-001",
+                    "product_name": "Travel Backpack",
+                    "category": "Bags",
+                    "material": "Nylon",
+                    "color": "Black",
+                    "stock": "20"
+                  },
+                  {
+                    "sku": "V-002",
+                    "product_name": "Water Bottle",
+                    "category": "Accessories",
+                    "material": "Steel",
+                    "color": "Blue",
+                    "stock": "0"
+                  },
+                  {
+                    "sku": "V-005",
+                    "product_name": "Yoga Mat",
+                    "category": "Fitness",
+                    "material": "Rubber",
+                    "color": "Green",
+                    "stock": "15"
+                  },
+                  {
+                    "sku": "V-007",
+                    "product_name": "Phone Stand",
+                    "category": "Accessories",
+                    "material": "Aluminum",
+                    "color": "Silver",
+                    "stock": "30"
+                  }
+                ]
+              },
+              "status": "success",
+              "summary": "outputs\\wf003_cleaned_vendor_file.csv",
+              "duration_ms": 3.95,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "reporting",
+              "args": {
+                "name": "wf003_invalid_rows",
+                "content": [
+                  {
+                    "source_row": 4,
+                    "sku": "V-003",
+                    "product_name": NaN,
+                    "category": "Accessories",
+                    "material": "Plastic",
+                    "color": "Red",
+                    "stock": "12",
+                    "reason": "missing product_name"
+                  },
+                  {
+                    "source_row": 5,
+                    "sku": NaN,
+                    "product_name": "Desk Lamp",
+                    "category": "Accessories",
+                    "material": "Metal",
+                    "color": "White",
+                    "stock": "7",
+                    "reason": "missing sku"
+                  },
+                  {
+                    "source_row": 7,
+                    "sku": null,
+                    "product_name": null,
+                    "category": "Misc",
+                    "material": NaN,
+                    "color": NaN,
+                    "stock": "3",
+                    "reason": "missing sku; missing product_name"
+                  }
+                ]
+              },
+              "status": "success",
+              "summary": "outputs\\wf003_invalid_rows.csv",
+              "duration_ms": 5.14,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "vendor_path": "data/mock/vendor_products.xlsx"
+      },
+      "defaults_used": [],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [
+        "outputs\\wf003_cleaned_vendor_file.csv",
+        "outputs\\wf003_invalid_rows.csv"
+      ],
+      "duration_ms": 71.53,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 14,
+    "label": "WF003 error handling: file does not exist",
+    "expected_workflow": "WF003",
+    "selected_workflow": "WF003",
+    "routing_correct": true,
+    "request": "Process this vendor file data/mock/does_not_exist.csv and show invalid rows.",
+    "selection": {
+      "workflow_id": "WF003",
+      "workflow_name": "Vendor File Processing",
+      "confidence": 0.98,
+      "reason": "User wants to process a vendor file and see invalid rows, which matches the Vendor File Processing workflow.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.195
+        },
+        {
+          "workflow_id": "WF004",
+          "workflow_name": "Product Description Generator",
+          "score": 0.098
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF003",
+      "workflow_name": "Vendor File Processing",
+      "status": "failed",
+      "summary": "Workflow could not complete: Data file not found: data/mock/does_not_exist.csv",
+      "data": {},
+      "steps": [
+        {
+          "index": 0,
+          "name": "Read file",
+          "status": "failed",
+          "detail": "",
+          "duration_ms": 0.42,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/does_not_exist.csv",
+                "normalize": "True"
+              },
+              "status": "failed",
+              "summary": "",
+              "duration_ms": 0.38,
+              "attempts": 1,
+              "error": "FileNotFoundError: Data file not found: data/mock/does_not_exist.csv"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "detect columns",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "normalize column names",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "validate required fields",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "identify invalid rows",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "produce cleaned dataset",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "vendor_path": "data/mock/does_not_exist.csv"
+      },
+      "defaults_used": [],
+      "question": null,
+      "missing": [],
+      "error": "FileNotFoundError: Data file not found: data/mock/does_not_exist.csv",
+      "artifacts": [],
+      "duration_ms": 0.52,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 15,
+    "label": "WF004 with all attributes supplied",
+    "expected_workflow": "WF004",
+    "selected_workflow": "WF004",
+    "routing_correct": true,
+    "request": "Generate SEO content for this product.",
+    "selection": {
+      "workflow_id": "WF004",
+      "workflow_name": "Product Description Generator",
+      "confidence": 0.97,
+      "reason": "The request is to generate SEO content for a product, which aligns with the Product Description Generator workflow that creates product descriptions, short descriptions, SEO titles, and meta descriptions.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF008",
+          "workflow_name": "SEO Keyword Classification",
+          "score": 0.514
+        },
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.474
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF004",
+      "workflow_name": "Product Description Generator",
+      "status": "success",
+      "summary": "Product Description: The Travel Backpack is a sleek black nylon bag designed for frequent travelers. It offers a 20L capacity, providing ample space for essentials on the go. Its durable construction ensures reliable performance on any journey.\nShort Description: Black nylon Travel Backpack with 20L capacity for frequent travelers.\nSeo Title: Travel Backpack \u2013 Black Nylon 20L for Frequent Travelers\nMeta Description: Explore the world with the black nylon Travel Backpack, offering 20L capacity for frequent travelers seeking reliable, spacious gear.",
+      "data": {
+        "product_description": "The Travel Backpack is a sleek black nylon bag designed for frequent travelers. It offers a 20L capacity, providing ample space for essentials on the go. Its durable construction ensures reliable performance on any journey.",
+        "short_description": "Black nylon Travel Backpack with 20L capacity for frequent travelers.",
+        "seo_title": "Travel Backpack \u2013 Black Nylon 20L for Frequent Travelers",
+        "meta_description": "Explore the world with the black nylon Travel Backpack, offering 20L capacity for frequent travelers seeking reliable, spacious gear.",
+        "missing_information": [],
+        "generated_by": "llm:openai/gpt-oss-120b",
+        "used_sample_product": false,
+        "facts_used": {
+          "product_name": "Travel Backpack",
+          "category": "Bags",
+          "material": "Nylon",
+          "color": "Black",
+          "target_audience": "frequent travelers",
+          "attributes": {
+            "capacity": "20L"
+          }
+        }
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate required attributes",
+          "status": "success",
+          "detail": "missing attributes: none",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "create product description",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 2590.93,
+          "tool_calls": [
+            {
+              "tool": "llm",
+              "args": {
+                "task": "product_content",
+                "facts": "<dict keys=['product_name', 'category', 'material', 'color', 'target_audience', 'attributes']>",
+                "system": "You write e-commerce copy. Use ONLY the facts provided. Never invent or assume attributes, specs, materials, benefits...",
+                "prompt": "Write JSON with keys product_description (2-3 sentences), short_description (<=110 chars), seo_title (<=60 chars), me..."
+              },
+              "status": "success",
+              "summary": "dict(source, content)",
+              "duration_ms": 2590.85,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "generate short description",
+          "status": "success",
+          "detail": "short_description produced in the same structured LLM call",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "generate SEO title",
+          "status": "success",
+          "detail": "seo_title produced in the same structured LLM call",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "generate meta description",
+          "status": "success",
+          "detail": "text validation passed",
+          "duration_ms": 0.11,
+          "tool_calls": [
+            {
+              "tool": "text_validation",
+              "args": {
+                "fields": "<dict keys=['product_description', 'short_description', 'seo_title', 'meta_description']>",
+                "limits": {
+                  "short_description": 110,
+                  "seo_title": 60,
+                  "meta_description": 155
+                }
+              },
+              "status": "success",
+              "summary": "dict(ok, issues, fields)",
+              "duration_ms": 0.07,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "product_name": "Travel Backpack",
+        "category": "Bags",
+        "material": "Nylon",
+        "color": "Black",
+        "target_audience": "frequent travelers",
+        "attributes": {
+          "capacity": "20L"
+        }
+      },
+      "defaults_used": [],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 2591.19,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 16,
+    "label": "WF005 order not found",
+    "expected_workflow": "WF005",
+    "selected_workflow": "WF005",
+    "routing_correct": true,
+    "request": "Where is order ORD-9999?",
+    "selection": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "confidence": 0.99,
+      "reason": "User asks for the status of a specific order, which matches the Customer Order Status workflow (WF005).",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        },
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "status": "needs_input",
+      "summary": "No order found for 'ORD-9999'. Please check it or provide another identifier (order ID or customer email).",
+      "data": {},
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate identifier",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "search order data",
+          "status": "blocked",
+          "detail": "",
+          "duration_ms": 26.09,
+          "tool_calls": [
+            {
+              "tool": "order_api",
+              "args": {
+                "path": "data/mock/orders.csv",
+                "order_id": "ORD-9999"
+              },
+              "status": "success",
+              "summary": "0 items",
+              "duration_ms": 26.02,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "retrieve order status",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "retrieve shipment information",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "summarize current status",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "order_id": "ORD-9999",
+        "orders_path": "data/mock/orders.csv",
+        "shipments_path": "data/mock/shipments.csv"
+      },
+      "defaults_used": [
+        "orders_path",
+        "shipments_path"
+      ],
+      "question": "No order found for 'ORD-9999'. Please check it or provide another identifier (order ID or customer email).",
+      "missing": [
+        "order_id"
+      ],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 26.27,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 17,
+    "label": "WF005 lookup by email (2 orders)",
+    "expected_workflow": "WF005",
+    "selected_workflow": "WF005",
+    "routing_correct": true,
+    "request": "What is the status of orders for alice@example.com?",
+    "selection": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "confidence": 0.99,
+      "reason": "User asks for order status using a customer email, which matches the trigger and inputs of WF005 (Customer Order Status).",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        },
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "status": "success",
+      "summary": "ORD-1001 (Wireless Mouse, USB-C Hub): order Shipped; shipment In Transit via BlueDart, tracking TRK1001, ETA 2026-10-09.\nORD-1004 (Desk Organizer): order Shipped; shipment Out for Delivery via BlueDart, tracking TRK1004, ETA 2026-10-07.",
+      "data": {
+        "orders": [
+          {
+            "order_id": "ORD-1001",
+            "items": [
+              "Wireless Mouse",
+              "USB-C Hub"
+            ],
+            "order_status": "Shipped",
+            "shipment": {
+              "order_id": "ORD-1001",
+              "carrier": "BlueDart",
+              "tracking_number": "TRK1001",
+              "shipment_status": "In Transit",
+              "estimated_delivery": "2026-10-09"
+            }
+          },
+          {
+            "order_id": "ORD-1004",
+            "items": [
+              "Desk Organizer"
+            ],
+            "order_status": "Shipped",
+            "shipment": {
+              "order_id": "ORD-1004",
+              "carrier": "BlueDart",
+              "tracking_number": "TRK1004",
+              "shipment_status": "Out for Delivery",
+              "estimated_delivery": "2026-10-07"
+            }
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate identifier",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "search order data",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 7.03,
+          "tool_calls": [
+            {
+              "tool": "order_api",
+              "args": {
+                "path": "data/mock/orders.csv",
+                "customer_email": "alice@example.com"
+              },
+              "status": "success",
+              "summary": "2 items",
+              "duration_ms": 6.99,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "retrieve order status",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "retrieve shipment information",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 31.56,
+          "tool_calls": [
+            {
+              "tool": "shipment_lookup",
+              "args": {
+                "path": "data/mock/shipments.csv",
+                "order_id": "ORD-1001"
+              },
+              "status": "success",
+              "summary": "dict(order_id, carrier, tracking_number, shipment_status, estimated_delivery)",
+              "duration_ms": 23.19,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "shipment_lookup",
+              "args": {
+                "path": "data/mock/shipments.csv",
+                "order_id": "ORD-1004"
+              },
+              "status": "success",
+              "summary": "dict(order_id, carrier, tracking_number, shipment_status, estimated_delivery)",
+              "duration_ms": 8.29,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "summarize current status",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.02,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "customer_email": "alice@example.com",
+        "orders_path": "data/mock/orders.csv",
+        "shipments_path": "data/mock/shipments.csv"
+      },
+      "defaults_used": [
+        "orders_path",
+        "shipments_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 38.83,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 18,
+    "label": "WF005 order without shipment yet",
+    "expected_workflow": "WF005",
+    "selected_workflow": "WF005",
+    "routing_correct": true,
+    "request": "Where is order ORD-1002?",
+    "selection": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "confidence": 0.99,
+      "reason": "User asks for the status of a specific order (ORD-1002), which matches the Customer Order Status workflow.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        },
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "status": "success",
+      "summary": "ORD-1002 (Mechanical Keyboard): order Processing; no shipment/tracking information available yet.",
+      "data": {
+        "orders": [
+          {
+            "order_id": "ORD-1002",
+            "items": [
+              "Mechanical Keyboard"
+            ],
+            "order_status": "Processing",
+            "shipment": null
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate identifier",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "search order data",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 6.32,
+          "tool_calls": [
+            {
+              "tool": "order_api",
+              "args": {
+                "path": "data/mock/orders.csv",
+                "order_id": "ORD-1002"
+              },
+              "status": "success",
+              "summary": "1 items",
+              "duration_ms": 6.29,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "retrieve order status",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "retrieve shipment information",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 7.78,
+          "tool_calls": [
+            {
+              "tool": "shipment_lookup",
+              "args": {
+                "path": "data/mock/shipments.csv",
+                "order_id": "ORD-1002"
+              },
+              "status": "success",
+              "summary": "None",
+              "duration_ms": 7.75,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "summarize current status",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "order_id": "ORD-1002",
+        "orders_path": "data/mock/orders.csv",
+        "shipments_path": "data/mock/shipments.csv"
+      },
+      "defaults_used": [
+        "orders_path",
+        "shipments_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 14.26,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 19,
+    "label": "WF005 invalid identifier",
+    "expected_workflow": "WF005",
+    "selected_workflow": "WF005",
+    "routing_correct": true,
+    "request": "Where is order 12?",
+    "selection": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "confidence": 0.99,
+      "reason": "User is asking for the status of a specific order (order 12), which matches the Customer Order Status workflow.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF001",
+          "workflow_name": "Inventory Restock Check",
+          "score": 0.0
+        },
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.0
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF005",
+      "workflow_name": "Customer Order Status",
+      "status": "needs_input",
+      "summary": "'12' is not a valid order ID (expected like ORD-1001). Please provide another identifier.",
+      "data": {},
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate identifier",
+          "status": "blocked",
+          "detail": "",
+          "duration_ms": 0.02,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "search order data",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "retrieve order status",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "retrieve shipment information",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 4,
+          "name": "summarize current status",
+          "status": "not_run",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "order_id": "12",
+        "orders_path": "data/mock/orders.csv",
+        "shipments_path": "data/mock/shipments.csv"
+      },
+      "defaults_used": [
+        "orders_path",
+        "shipments_path"
+      ],
+      "question": "'12' is not a valid order ID (expected like ORD-1001). Please provide another identifier.",
+      "missing": [
+        "order_id"
+      ],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 0.13,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 20,
+    "label": "WF007 complete brief",
+    "expected_workflow": "WF007",
+    "selected_workflow": "WF007",
+    "routing_correct": true,
+    "request": "Create a campaign brief to launch the new autumn collection from Oct 10 to Oct 20 targeting young travelers with 20% off",
+    "selection": {
+      "workflow_id": "WF007",
+      "workflow_name": "Marketing Campaign Brief",
+      "confidence": 0.98,
+      "reason": "User requests a marketing campaign brief with goal, dates, target audience, and promotion, which matches WF007",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF004",
+          "workflow_name": "Product Description Generator",
+          "score": 0.245
+        },
+        {
+          "workflow_id": "WF002",
+          "workflow_name": "Product Price Validation",
+          "score": 0.131
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF007",
+      "workflow_name": "Marketing Campaign Brief",
+      "status": "success",
+      "summary": "CAMPAIGN BRIEF\nObjective: launch the new autumn collection (launch)\nAudience: young travelers\nProducts: autumn collection\nPromotion: 20% off\nMessaging:\n  - Introducing the new autumn collection\n  - Designed for young travelers\n  - Enjoy 20% off\nChannels: Email newsletter, Website homepage banner + landing page, Instagram / Reels, YouTube Shorts / short video, Google Shopping / paid search\nTimeline:\n  - Pre-launch (teasers, creative sign-off): 2026-10-03 to 2026-10-09\n  - Campaign live: 2026-10-10 to 2026-10-20\n  - Wrap-up & results review: 2026-10-21 to 2026-10-24\nChecklist:\n  [ ] Confirm campaign objective and KPIs\n  [ ] Finalise product list and stock availability\n  [ ] Configure promotion in store: 20% off\n  [ ] Approve messaging and creative\n  [ ] Set up landing page and tracking links\n  [ ] Schedule channel posts / emails\n  [ ] Launch campaign on the start date\n  [ ] Monitor performance daily and adjust\n  [ ] Run post-campaign review",
+      "data": {
+        "objective": {
+          "goal": "launch the new autumn collection",
+          "type": "launch"
+        },
+        "audience": "young travelers",
+        "products": [
+          {
+            "name": "autumn collection",
+            "category": null,
+            "material": null,
+            "color": null
+          }
+        ],
+        "promotion": "20% off",
+        "messaging": [
+          "Introducing the new autumn collection",
+          "Designed for young travelers",
+          "Enjoy 20% off"
+        ],
+        "channels": [
+          {
+            "channel": "Email newsletter",
+            "why": "Owned channel with direct reach to existing customers"
+          },
+          {
+            "channel": "Website homepage banner + landing page",
+            "why": "Single destination for the offer"
+          },
+          {
+            "channel": "Instagram / Reels",
+            "why": "Visual product discovery for a younger audience"
+          },
+          {
+            "channel": "YouTube Shorts / short video",
+            "why": "Short-form video reach"
+          },
+          {
+            "channel": "Google Shopping / paid search",
+            "why": "Capture purchase-intent demand"
+          }
+        ],
+        "timeline": {
+          "dates": "Oct 10 to Oct 20",
+          "phases": [
+            {
+              "phase": "Pre-launch (teasers, creative sign-off)",
+              "date": "2026-10-03 to 2026-10-09"
+            },
+            {
+              "phase": "Campaign live",
+              "date": "2026-10-10 to 2026-10-20"
+            },
+            {
+              "phase": "Wrap-up & results review",
+              "date": "2026-10-21 to 2026-10-24"
+            }
+          ]
+        },
+        "checklist": [
+          "Confirm campaign objective and KPIs",
+          "Finalise product list and stock availability",
+          "Configure promotion in store: 20% off",
+          "Approve messaging and creative",
+          "Set up landing page and tracking links",
+          "Schedule channel posts / emails",
+          "Launch campaign on the start date",
+          "Monitor performance daily and adjust",
+          "Run post-campaign review"
+        ],
+        "generated_by": "llm:openai/gpt-oss-120b"
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Validate inputs",
+          "status": "success",
+          "detail": "goal and dates present",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 1,
+          "name": "identify campaign objective",
+          "status": "success",
+          "detail": "objective = launch",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "summarize products",
+          "status": "success",
+          "detail": "products from request",
+          "duration_ms": 26.38,
+          "tool_calls": [
+            {
+              "tool": "product_data_reader",
+              "args": {
+                "path": "data/mock/products.csv",
+                "names": [
+                  "autumn collection"
+                ]
+              },
+              "status": "success",
+              "summary": "table with 0 rows, 7 columns",
+              "duration_ms": 25.16,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "name": "create messaging",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3137.57,
+          "tool_calls": [
+            {
+              "tool": "llm",
+              "args": {
+                "task": "campaign_messaging",
+                "facts": "<dict keys=['goal', 'products', 'target_audience', 'promotion']>",
+                "system": "You are a marketing strategist. Use only the facts given; do not invent offers, dates, prices or product claims.",
+                "prompt": "Return JSON with objective_type (one of launch, awareness, sales, retention, clearance) and key_messages (3-4 short s..."
+              },
+              "status": "success",
+              "summary": "dict(source, content)",
+              "duration_ms": 3137.45,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "create channel recommendations",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.02,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "create campaign checklist",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.69,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "goal": "launch the new autumn collection",
+        "dates": "Oct 10 to Oct 20",
+        "target_audience": "young travelers",
+        "promotion": "20% off",
+        "products": [
+          "autumn collection"
+        ],
+        "products_path": "data/mock/products.csv"
+      },
+      "defaults_used": [
+        "products_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 3165.92,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 21,
+    "label": "WF009 task given",
+    "expected_workflow": "WF009",
+    "selected_workflow": "WF009",
+    "routing_correct": true,
+    "request": "Assign this urgent task to the best available developer by Friday.",
+    "selection": {
+      "workflow_id": "WF009",
+      "workflow_name": "Employee Task Assignment",
+      "confidence": 0.97,
+      "reason": "The request asks to assign an urgent task to the best available developer by a specific deadline, which aligns with the Employee Task Assignment workflow (WF009).",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF005",
+          "workflow_name": "Customer Order Status",
+          "score": 0.216
+        },
+        {
+          "workflow_id": "WF006",
+          "workflow_name": "Duplicate Product Detection",
+          "score": 0.216
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF009",
+      "workflow_name": "Employee Task Assignment",
+      "status": "success",
+      "summary": "Recommended: Rohan (E003).\nReason: Rohan covers 3/4 required skills (backend, database, python) and has 4 free capacity slots (80% available); score 0.775.\nTask: Build a Python REST API with a database backend\nPriority: urgent\nDeadline: Friday\nRunners-up: Aarav (0.575)",
+      "data": {
+        "assigned": true,
+        "employee": "Rohan",
+        "employee_id": "E003",
+        "reason": "Rohan covers 3/4 required skills (backend, database, python) and has 4 free capacity slots (80% available); score 0.775.",
+        "priority": "urgent",
+        "deadline": "Friday",
+        "task": "Build a Python REST API with a database backend",
+        "required_skills": [
+          "api",
+          "backend",
+          "database",
+          "python"
+        ],
+        "ranked_candidates": [
+          {
+            "employee_id": "E003",
+            "name": "Rohan",
+            "role": "Backend Developer",
+            "matched_skills": [
+              "backend",
+              "database",
+              "python"
+            ],
+            "skill_coverage": 0.75,
+            "free_capacity": 4.0,
+            "availability": 0.8,
+            "score": 0.775,
+            "eligible": true,
+            "note": "eligible"
+          },
+          {
+            "employee_id": "E001",
+            "name": "Aarav",
+            "role": "Backend Developer",
+            "matched_skills": [
+              "api",
+              "backend",
+              "python"
+            ],
+            "skill_coverage": 0.75,
+            "free_capacity": 2.0,
+            "availability": 0.4,
+            "score": 0.575,
+            "eligible": true,
+            "note": "eligible"
+          },
+          {
+            "employee_id": "E002",
+            "name": "Diya",
+            "role": "Frontend Developer",
+            "matched_skills": [],
+            "skill_coverage": 0.0,
+            "free_capacity": 1.0,
+            "availability": 0.2,
+            "score": 0.1,
+            "eligible": false,
+            "note": "insufficient skill match"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Understand task requirements",
+          "status": "success",
+          "detail": "required skills: ['api', 'backend', 'database', 'python']; priority: urgent",
+          "duration_ms": 23.95,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/employees.csv"
+              },
+              "status": "success",
+              "summary": "table with 6 rows, 6 columns",
+              "duration_ms": 21.7,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 6x6>",
+                "required_columns": [
+                  "employee_id",
+                  "name",
+                  "skills",
+                  "current_workload",
+                  "capacity"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.55,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "compare employee skills",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 4.62,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "check current workload",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 1.19,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "rank candidates",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.07,
+          "tool_calls": [
+            {
+              "tool": "ranking_logic",
+              "args": {
+                "candidates": [
+                  {
+                    "employee_id": "E001",
+                    "name": "Aarav",
+                    "role": "Backend Developer",
+                    "matched_skills": [
+                      "api",
+                      "backend",
+                      "python"
+                    ],
+                    "skill_coverage": 0.75,
+                    "free_capacity": 2.0,
+                    "availability": 0.4,
+                    "score": 0.575,
+                    "eligible": true,
+                    "note": "eligible"
+                  },
+                  {
+                    "employee_id": "E002",
+                    "name": "Diya",
+                    "role": "Frontend Developer",
+                    "matched_skills": [],
+                    "skill_coverage": 0.0,
+                    "free_capacity": 1.0,
+                    "availability": 0.2,
+                    "score": 0.1,
+                    "eligible": false,
+                    "note": "insufficient skill match"
+                  },
+                  {
+                    "employee_id": "E003",
+                    "name": "Rohan",
+                    "role": "Backend Developer",
+                    "matched_skills": [
+                      "backend",
+                      "database",
+                      "python"
+                    ],
+                    "skill_coverage": 0.75,
+                    "free_capacity": 4.0,
+                    "availability": 0.8,
+                    "score": 0.775,
+                    "eligible": true,
+                    "note": "eligible"
+                  }
+                ],
+                "key": "score"
+              },
+              "status": "success",
+              "summary": "3 items",
+              "duration_ms": 0.02,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "select employee",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "generate assignment summary",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.03,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "priority": "urgent",
+        "deadline": "Friday",
+        "role_filter": "developer",
+        "task_description": "Build a Python REST API with a database backend",
+        "employees_path": "data/mock/employees.csv"
+      },
+      "defaults_used": [
+        "employees_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 30.21,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 22,
+    "label": "WF009 no suitable employee -> escalate",
+    "expected_workflow": "WF009",
+    "selected_workflow": "WF009",
+    "routing_correct": true,
+    "request": "Assign this urgent task to the best available developer.",
+    "selection": {
+      "workflow_id": "WF009",
+      "workflow_name": "Employee Task Assignment",
+      "confidence": 0.98,
+      "reason": "The request is to assign an urgent task to the best available developer, which aligns with the Employee Task Assignment workflow (WF009) that handles task assignment based on description, skills, workload, and priority.",
+      "method": "llm",
+      "alternatives": [
+        {
+          "workflow_id": "WF005",
+          "workflow_name": "Customer Order Status",
+          "score": 0.216
+        },
+        {
+          "workflow_id": "WF006",
+          "workflow_name": "Duplicate Product Detection",
+          "score": 0.216
+        }
+      ],
+      "clarification": null
+    },
+    "result": {
+      "workflow_id": "WF009",
+      "workflow_name": "Employee Task Assignment",
+      "status": "escalated",
+      "summary": "ESCALATE: no suitable employee for 'Train a computer vision model' (needs computer vision). Closest candidates: Rohan (insufficient skill match); Aarav (insufficient skill match); Diya (insufficient skill match). Please escalate to the manager.",
+      "data": {
+        "assigned": false,
+        "required_skills": [
+          "computer vision"
+        ],
+        "ranked_candidates": [
+          {
+            "employee_id": "E003",
+            "name": "Rohan",
+            "role": "Backend Developer",
+            "matched_skills": [],
+            "skill_coverage": 0.0,
+            "free_capacity": 4.0,
+            "availability": 0.8,
+            "score": 0.4,
+            "eligible": false,
+            "note": "insufficient skill match"
+          },
+          {
+            "employee_id": "E001",
+            "name": "Aarav",
+            "role": "Backend Developer",
+            "matched_skills": [],
+            "skill_coverage": 0.0,
+            "free_capacity": 2.0,
+            "availability": 0.4,
+            "score": 0.2,
+            "eligible": false,
+            "note": "insufficient skill match"
+          },
+          {
+            "employee_id": "E002",
+            "name": "Diya",
+            "role": "Frontend Developer",
+            "matched_skills": [],
+            "skill_coverage": 0.0,
+            "free_capacity": 1.0,
+            "availability": 0.2,
+            "score": 0.1,
+            "eligible": false,
+            "note": "insufficient skill match"
+          }
+        ]
+      },
+      "steps": [
+        {
+          "index": 0,
+          "name": "Understand task requirements",
+          "status": "success",
+          "detail": "required skills: ['computer vision']; priority: urgent",
+          "duration_ms": 4.3,
+          "tool_calls": [
+            {
+              "tool": "csv_reader",
+              "args": {
+                "path": "data/mock/employees.csv"
+              },
+              "status": "success",
+              "summary": "table with 6 rows, 6 columns",
+              "duration_ms": 3.23,
+              "attempts": 1,
+              "error": null
+            },
+            {
+              "tool": "data_validation",
+              "args": {
+                "df": "<table 6x6>",
+                "required_columns": [
+                  "employee_id",
+                  "name",
+                  "skills",
+                  "current_workload",
+                  "capacity"
+                ]
+              },
+              "status": "success",
+              "summary": "dict(valid_mask, reasons)",
+              "duration_ms": 0.42,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "compare employee skills",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 3.56,
+          "tool_calls": []
+        },
+        {
+          "index": 2,
+          "name": "check current workload",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.99,
+          "tool_calls": []
+        },
+        {
+          "index": 3,
+          "name": "rank candidates",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.04,
+          "tool_calls": [
+            {
+              "tool": "ranking_logic",
+              "args": {
+                "candidates": [
+                  {
+                    "employee_id": "E001",
+                    "name": "Aarav",
+                    "role": "Backend Developer",
+                    "matched_skills": [],
+                    "skill_coverage": 0.0,
+                    "free_capacity": 2.0,
+                    "availability": 0.4,
+                    "score": 0.2,
+                    "eligible": false,
+                    "note": "insufficient skill match"
+                  },
+                  {
+                    "employee_id": "E002",
+                    "name": "Diya",
+                    "role": "Frontend Developer",
+                    "matched_skills": [],
+                    "skill_coverage": 0.0,
+                    "free_capacity": 1.0,
+                    "availability": 0.2,
+                    "score": 0.1,
+                    "eligible": false,
+                    "note": "insufficient skill match"
+                  },
+                  {
+                    "employee_id": "E003",
+                    "name": "Rohan",
+                    "role": "Backend Developer",
+                    "matched_skills": [],
+                    "skill_coverage": 0.0,
+                    "free_capacity": 4.0,
+                    "availability": 0.8,
+                    "score": 0.4,
+                    "eligible": false,
+                    "note": "insufficient skill match"
+                  }
+                ],
+                "key": "score"
+              },
+              "status": "success",
+              "summary": "3 items",
+              "duration_ms": 0.01,
+              "attempts": 1,
+              "error": null
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "select employee",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.0,
+          "tool_calls": []
+        },
+        {
+          "index": 5,
+          "name": "generate assignment summary",
+          "status": "success",
+          "detail": "",
+          "duration_ms": 0.01,
+          "tool_calls": []
+        }
+      ],
+      "inputs": {
+        "priority": "urgent",
+        "role_filter": "developer",
+        "task_description": "Train a computer vision model",
+        "required_skills": [
+          "computer vision"
+        ],
+        "employees_path": "data/mock/employees.csv"
+      },
+      "defaults_used": [
+        "employees_path"
+      ],
+      "question": null,
+      "missing": [],
+      "error": null,
+      "artifacts": [],
+      "duration_ms": 9.1,
+      "llm_mode": "llm:openai/gpt-oss-120b"
+    }
+  },
+  {
+    "case": 23,
+    "label": "Ambiguous request -> clarification",
+    "expected_workflow": null,
+    "selected_workflow": null,
+    "routing_correct": true,
+    "request": "hello there",
+    "selection": {
+      "workflow_id": null,
+      "workflow_name": null,
+      "confidence": 0.1,
+      "reason": "User greeting does not match any defined workflow triggers",
+      "method": "llm",
+      "alternatives": [],
+      "clarification": "None of the available workflows match your request. Available: Inventory Restock Check, Product Price Validation, Vendor File Processing, Product Description Generator, Customer Order Status, Duplicate Product Detection, Marketing Campaign Brief, SEO Keyword Classification, Employee Task Assignment, Workflow Performance Report"
+    },
+    "result": null
+  }
+]

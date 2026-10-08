@@ -1,0 +1,169 @@
+{
+  "workflows": [
+    {
+      "workflow_id": "WF002",
+      "runs": 12,
+      "failures": 6,
+      "failure_rate": 50.0,
+      "success_rate": 50.0,
+      "avg_execution_time": 1.64,
+      "flagged": true,
+      "flag_reasons": [
+        "failure rate 50.0% > 10%"
+      ]
+    },
+    {
+      "workflow_id": "WF004",
+      "runs": 12,
+      "failures": 2,
+      "failure_rate": 16.67,
+      "success_rate": 83.33,
+      "avg_execution_time": 7.67,
+      "flagged": true,
+      "flag_reasons": [
+        "failure rate 16.67% > 10%"
+      ]
+    },
+    {
+      "workflow_id": "WF003",
+      "runs": 12,
+      "failures": 2,
+      "failure_rate": 16.67,
+      "success_rate": 83.33,
+      "avg_execution_time": 1.41,
+      "flagged": true,
+      "flag_reasons": [
+        "failure rate 16.67% > 10%"
+      ]
+    },
+    {
+      "workflow_id": "WF005",
+      "runs": 12,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "success_rate": 100.0,
+      "avg_execution_time": 9.27,
+      "flagged": true,
+      "flag_reasons": [
+        "avg time 9.27s > 8s"
+      ]
+    },
+    {
+      "workflow_id": "WF007",
+      "runs": 12,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "success_rate": 100.0,
+      "avg_execution_time": 6.33,
+      "flagged": false,
+      "flag_reasons": []
+    },
+    {
+      "workflow_id": "WF006",
+      "runs": 12,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "success_rate": 100.0,
+      "avg_execution_time": 2.58,
+      "flagged": false,
+      "flag_reasons": []
+    },
+    {
+      "workflow_id": "WF008",
+      "runs": 12,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "success_rate": 100.0,
+      "avg_execution_time": 1.77,
+      "flagged": false,
+      "flag_reasons": []
+    },
+    {
+      "workflow_id": "WF001",
+      "runs": 12,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "success_rate": 100.0,
+      "avg_execution_time": 1.15,
+      "flagged": false,
+      "flag_reasons": []
+    },
+    {
+      "workflow_id": "WF009",
+      "runs": 12,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "success_rate": 100.0,
+      "avg_execution_time": 0.99,
+      "flagged": false,
+      "flag_reasons": []
+    },
+    {
+      "workflow_id": "WF010",
+      "runs": 4,
+      "failures": 0,
+      "failure_rate": 0.0,
+      "success_rate": 100.0,
+      "avg_execution_time": 0.92,
+      "flagged": false,
+      "flag_reasons": []
+    }
+  ],
+  "frequent_errors": [
+    {
+      "error": "Invalid price format",
+      "count": 4,
+      "workflows": [
+        "WF002"
+      ]
+    },
+    {
+      "error": "LLM timeout",
+      "count": 2,
+      "workflows": [
+        "WF004"
+      ]
+    },
+    {
+      "error": "Missing required column: sku",
+      "count": 2,
+      "workflows": [
+        "WF003"
+      ]
+    },
+    {
+      "error": "Vendor price file missing",
+      "count": 2,
+      "workflows": [
+        "WF002"
+      ]
+    }
+  ],
+  "slow_steps": [
+    {
+      "workflow_id": "WF005",
+      "step": "shipment_lookup",
+      "avg_seconds": 6.6
+    },
+    {
+      "workflow_id": "WF004",
+      "step": "llm_generate",
+      "avg_seconds": 5.44
+    },
+    {
+      "workflow_id": "WF007",
+      "step": "llm_messaging",
+      "avg_seconds": 4.34
+    }
+  ],
+  "recommendations": [
+    "Add automated validation for price fields to eliminate \"Invalid price format\" errors and reduce WF002 failures",
+    "Implement pre\u2011run checks for required columns (e.g., sku) and vendor file presence to stop \"Missing required column\" and \"Vendor price file missing\" errors",
+    "Increase LLM request timeout or add retry/back\u2011off logic to mitigate \"LLM timeout\" failures in WF004 and WF007",
+    "Reduce WF002 failure rate by adding idempotent retry logic and detailed error logging for the failing steps",
+    "Investigate and refactor the \"shipment_lookup\" step in WF005 to lower its average time (6.6\u202fs) and bring total workflow time under the 8\u202fs threshold",
+    "Optimize the \"llm_generate\" step in WF004 (5.44\u202fs) by caching prompts or using a smaller model to improve overall latency",
+    "Set up monitoring alerts for any workflow whose failure_rate exceeds 10\u202f% or avg_execution_time exceeds 8\u202fs",
+    "Create a post\u2011run report that aggregates frequent error types and triggers targeted remediation tickets"
+  ]
+}

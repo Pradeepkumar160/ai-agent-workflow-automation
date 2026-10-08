@@ -1,0 +1,11 @@
+sku,product_name,current_stock,minimum_stock
+SKU-001,Wireless Mouse,4,10
+SKU-002,Mechanical Keyboard,18,10
+SKU-003,USB-C Hub,2,8
+SKU-004,Travel Backpack,25,10
+SKU-005,Steel Water Bottle,10,10
+SKU-006,Laptop Stand,0,5
+SKU-007,Noise Cancelling Headphones,7,5
+SKU-008,Canvas Tote Bag,3,12
+SKU-009,Webcam HD,15,6
+SKU-010,Desk Organizer,n/a,5

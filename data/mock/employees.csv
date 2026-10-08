@@ -1,0 +1,7 @@
+employee_id,name,role,skills,current_workload,capacity
+E001,Aarav,Backend Developer,python;backend;api;sql,3,5
+E002,Diya,Frontend Developer,javascript;react;frontend;css,4,5
+E003,Rohan,Backend Developer,python;backend;database;docker,1,5
+E004,Meera,QA Engineer,testing;automation;python,5,5
+E005,Kabir,Data Engineer,python;sql;etl;airflow,2,5
+E006,Sana,Designer,figma;ux;ui,1,4
